@@ -21,3 +21,8 @@ Liste des packages à Installer :
  ```shell
   dnf install -y git-all make extra-cmake-modules
 ```
+***
+Installer le dépot en local :
+```shell
+ git clone https://github.com/Sebastux/InstallSteamServer.git
+```
