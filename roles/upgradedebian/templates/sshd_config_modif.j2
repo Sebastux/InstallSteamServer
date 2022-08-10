@@ -1,0 +1,60 @@
+{{ ansible_managed | comment }}
+
+# Configuration du port d'écoute
+Port {{ ssh_port }}
+
+# Gestion réseau
+GatewayPorts no
+PermitTunnel no
+
+# Configuration de l'adresse d'écoute
+ListenAddress {{ ansible_default_ipv4.address }}
+
+# Utilisation de la dernière version du protocole
+Protocol 2
+
+# Type de clé ssh à utiliser
+
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# Gestion du fichier de log
+LogLevel INFO
+
+# Gestion de la connexion en root
+PermitRootLogin yes
+
+# Nombre de tentative et de session
+MaxAuthTries 3
+MaxSessions 2
+
+# Gestion de la connexion par mot de passe
+PasswordAuthentication yes
+PermitEmptyPasswords no
+
+# Utilisation de PAM pour la gestion des comptes.
+UsePAM yes
+
+# Gestion de l'agent
+AllowAgentForwarding no
+X11Forwarding no
+AllowTcpForwarding no
+AllowStreamLocalForwarding no
+Compression no
+ClientAliveCountMax 2
+
+# Gestion de l'affichage à la connexion
+PrintMotd no
+PrintLastLog yes
+
+# Création du fichier pid
+PidFile /var/run/sshd.pid
+
+# Configuration du chiffrement
+Ciphers aes128-ctr,aes192-ctr,aes256-ctr
+
+HostKeyAlgorithms ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-dss
+
+KexAlgorithms ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha256
+
+MACs hmac-sha2-256,hmac-sha2-512,hmac-sha1
