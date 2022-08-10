@@ -1,0 +1,21 @@
+exclude_paths:
+  - .cache/
+  - .github/
+  - .yamllint
+  - .ansible-lint
+
+verbosity: 1
+
+extra_vars:
+  cible: toto
+
+skip_list:
+  - 'fqcn-builtins'
+  - 'package-latest'
+
+warn_list:
+  - 'document-end'
+  - 'brackets'
+  - 'ignore-errors'
+
+use_default_rules: true

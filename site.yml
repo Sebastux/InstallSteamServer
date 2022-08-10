@@ -1,0 +1,25 @@
+---
+# Lancement de la tache d'installation complete du serveur.
+- name: Installation du tronc commun en cours.
+  hosts: "{{ cible }}"
+  remote_user: root
+  gather_facts: yes
+  roles:
+    - troncommun
+
+- name: Installation des compilateurs en cours.
+  hosts: "{{ cible }}"
+  remote_user: root
+  gather_facts: yes
+  roles:
+    - gcc
+    - make
+    - cmake
+
+- name: Installation des outils en cours.
+  hosts: "{{ cible }}"
+  remote_user: root
+  gather_facts: yes
+  roles:
+    - python3
+    - git

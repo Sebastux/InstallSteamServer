@@ -1,0 +1,47 @@
+yaml-files:
+  - '*.yaml'
+  - '*.yml'
+  - '.yamllint'
+
+ignore: |
+  .github/
+  docs/
+  ficscommun/
+
+rules:
+  brackets:
+    forbid: false
+    min-spaces-inside: 1
+    max-spaces-inside: 1
+    min-spaces-inside-empty: 1
+    max-spaces-inside-empty: 1
+
+  truthy:
+    allowed-values: ['true', 'false', 'True', 'False', 'yes', 'no', 'Yes', 'No']
+
+  document-end:
+    present: false
+
+  document-start:
+    present: true
+    level: error
+
+  indentation: {spaces: 2, indent-sequences: true}
+
+  new-lines:
+    type: unix
+
+  trailing-spaces: disable
+
+  line-length:
+    level: warning
+    max: 140
+
+  commas:
+    level: warning
+    max-spaces-before: 0
+    min-spaces-after: 1
+    max-spaces-after: 1
+
+  comments: disable
+  comments-indentation: disable
