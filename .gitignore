@@ -2,20 +2,8 @@
 staging/inventory
 production/inventory
 
-# Ne pas prendre en compte les scripts de lancement des playbooks.
-install_all.sh
-install_cmake.sh
-install_gcc.sh
-install_git.sh
-install_make.sh
-install_python3.sh
-install_tronccommun.sh
-
-
 # Ne pas prendre en compte le fichier contenant le mot de passe du vault.
 passwd.txt
 
-# Ne pas prendre en compte le répertoire contenant les clés ssh.
-clessh
-
+# Ne pas prendre en compte le répertoire d'environement virtuel.
 .venv

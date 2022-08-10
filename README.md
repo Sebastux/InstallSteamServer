@@ -14,3 +14,10 @@ Divers roles Ansible permettant de migrer de debian 10 à debian 11 et d'install
 ![Steam](https://img.shields.io/badge/steam-%23000000.svg?style=for-the-badge&logo=steam&logoColor=white)
 
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+
+***
+Liste des packages à Installer :
+
+ ```shell
+  dnf install -y git-all make extra-cmake-modules
+```
