@@ -1,1 +1,48 @@
 ---
+- name: Mise à jour du source.list par défaut.
+  template:
+    src: templates/sourcelisted10.j2
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Installation des packages necessaire à la migration.
+  apt:
+    name: "{{ liste_packages_migration }}"
+    state: latest
+    clean: yes
+    update_cache: yes
+
+- name: Mise à jour de la VM.
+  apt:
+    name: "*"
+    state: latest
+
+- name: Redémarrage du serveur.
+  reboot:
+    msg: "Redémarrage automatique du serveur par ansible."
+    reboot_timeout: 300
+
+- name: Installation des dépôts debian 11
+  template:
+    src: templates/sourcelist.j2
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Mise à jour vers debian 11.
+  apt:
+    force_apt_get: yes
+    update_cache: yes
+    upgrade: dist
+
+- name: Redémarrage du serveur.
+  reboot:
+    msg: "Redémarrage automatique du serveur par ansible."
+    connect_timeout: 5
+    reboot_timeout: 300
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: uptime
