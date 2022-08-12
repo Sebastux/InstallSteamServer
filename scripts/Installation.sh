@@ -2,5 +2,5 @@
 
 clear
 source ./.venv/bin/activate
-ansible site.yml -i production 
+ansible-playbook site.yml -i production 
 deactivate
