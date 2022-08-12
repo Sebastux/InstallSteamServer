@@ -1,6 +1,7 @@
 ---
 # Lancement de la tache d'installation complete du serveur.
 - name: Installation et configuration de la machine.
+  hosts: serveur
   remote_user: root
   gather_facts: yes
   roles:
