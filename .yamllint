@@ -41,7 +41,7 @@ rules:
     level: warning
     max-spaces-before: 0
     min-spaces-after: 1
-    max-spaces-after: 1
+    max-spaces-after: 2
 
   comments: disable
   comments-indentation: disable
