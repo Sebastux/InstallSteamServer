@@ -38,6 +38,12 @@
     update_cache: yes
     upgrade: dist
 
+- name: Nettoyage des paquets orphelin.
+  apt:
+    force_apt_get: yes
+    autoremove: yes
+    purge: yes
+
 - name: Redémarrage du serveur.
   reboot:
     msg: "Redémarrage automatique du serveur par ansible."
