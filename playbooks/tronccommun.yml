@@ -1,5 +1,5 @@
 ---
-- name: Configuration de la machine.
+- name: Installation du tronc commun.
   hosts: serveur
   remote_user: root
   gather_facts: yes
