@@ -1,0 +1,7 @@
+---
+- name: Configuration de la machine.
+  hosts: serveur
+  remote_user: root
+  gather_facts: yes
+  roles:
+    - tronccommun
