@@ -1,0 +1,10 @@
+#::::::::::::::::::::::::::::::::::-REGLES-::::::::::::::::::::::::::::::::::::::::::::::#
+# Ce système est privé. Si vous n'êtes pas un utilisateur autorisé, veuillez             #
+# vous déconnecter de celui-ci. Toutes les actions sont tracées et aucune                #
+# action ne peut être effectuée sans autorisation de l'administrateur.                   #
+# Toute connexion non autorisée entrainera une plainte auprès des services               #
+# de police.                                                                             #
+# Aucun fichier ou programme illégal ne doit être stocké sur ce serveur.                 #
+# Si vous avez un doute sur votre droit à la connexion sur ce serveur,                   #
+# rapprochez-vous de l'administrateur ou de l'hébergeur.                                 #
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
