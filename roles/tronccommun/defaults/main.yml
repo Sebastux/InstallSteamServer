@@ -1,2 +1,16 @@
 ---
-# defaults file for tronccommun
+liste_install: [ 'aptitude',  'cockpit', 'cockpit-doc', 'cockpit-networkmanager',
+                 'cockpit-packagekit', 'cockpit-shell', 'cockpit-ssh',
+                 'cockpit-storaged', 'cockpit-system', 'cockpit-users',
+                 'firewalld', 'chrony', 'python3-all', 'build-essential',
+                 'cmake', 'p7zip-full', 'smartmontools', 'htop', 'bpythop', 'unrar',
+                 'sudo', 'mlocate', 'apt-file', 'net-tools', 'atop', 'powertop',
+                 'itop', 'screen', 'tree', 'wget', 'curl', 'fail2ban', 'vim',
+                 'vim-addon-manager', 'vim-doc', 'vim-pathogenvim-pathogen',
+                 'vim-python3', 'vim-scripts', 'vim-solarized', 'vim-syntastic',
+                 'vim-youcompleteme', 'git-all', 'python3-all', 'dirmngr',
+                 'apt-transport-https', 'neofetch' ]
+
+liste_pip: [ 'pip', 'setuptools', 'wheel' ]
+
+ssh_port: 22
