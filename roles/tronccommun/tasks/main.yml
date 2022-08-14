@@ -41,11 +41,25 @@
     state: absent
     purge: yes
 
-- name: Installation des packages du rôle.
-  apt:
-    name: "{{ liste_install }}"
-    state: latest
-    update_cache: yes
+- name: Gestion d'erreur lors de l'installation des packages du role.
+  block:
+    - name: Installation des packages du rôle.
+      apt:
+        name: "{{ liste_install }}"
+        state: latest
+        update_cache: yes
+  rescue:
+    - name: Suppression d'un package problématique.
+      apt:
+        name: elpa-magit
+        state: absent
+        purge: yes
+
+    - name: Installation des packages du rôle.
+      apt:
+        name: "{{ liste_install }}"
+        state: latest
+        update_cache: yes
 
 - name: Mise à jour des packages de bases python.
   pip:
