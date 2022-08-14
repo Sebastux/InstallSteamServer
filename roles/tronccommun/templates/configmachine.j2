@@ -1,0 +1,46 @@
+#!/bin/bash
+# -*- coding: utf-8 -*-
+# shellcheck disable=SC1009,SC1054,SC1056,SC1072,SC1073,SC1083
+
+#==============================================================================
+# Titre            : configmachine.sh
+# Description      : Script de configuration de VM
+# Auteur           : MELONI Sébastien
+# Date             : 14/08/2022
+# Modification     : 14/08/2022
+# Version          : 1.00
+# Utilisation      : ./configmachine.sh
+# Notes            : Ce script est destiné à être lancé par ansible pour
+#                    la configuration du clavier, de la langue et
+#                    du nom de la machine.
+# Version de bash  : 5.x
+#==============================================================================
+# Déclaration de variables.
+heure=""
+
+# Configuration de la langue.
+localectl set-locale LANG=fr_FR.UTF-8
+localectl set-keymap fr-oss_latin9
+
+# Récupération de l'heure courante.
+heure=$(date -s "$(curl -s --head http://google.com | grep ^Date: | sed 's/Date: //g')")
+
+# Mise à l'heure de la machine.
+timedatectl set-time "$(echo $heure | cut -d' ' -f 5)"
+
+# Modification du hostname de la machine.
+{% if fqdn_machine | length %}
+hostnamectl set-hostname {{ fqdn_machine | lower }}
+{% else %}
+hostnamectl set-hostname debian11.localhost.localdomain
+{% endif %}
+
+# Modification de la localisation de la VM
+hostnamectl set-location "Dans les nuages"
+
+# Personalisation de la machine.
+hostnamectl set-icon-name server
+hostnamectl set-chassis server
+
+# Modification de l'environement d'installation.
+hostnamectl set-deployment {{ environnement_machine }}
