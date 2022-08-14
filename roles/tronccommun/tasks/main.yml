@@ -16,14 +16,14 @@
     mode: 0644
     backup: no
   with_items:
-    - {source: 'backports.j2', destination: '' }
-    - {source: 'proposedupdate.j2', destination: '' }
+    - { source: 'backports.j2', destination: 'backports.list' }
+    - { source: 'proposedupdate.j2', destination: 'proposedupdate.list' }
 
 - name: Ajout de la résolution du nom du serveur.
   lineinfile:
     path: /etc/hosts
-    line: "{{ ansible_default_ipv4.address }}  {{ fqdn_serveur }} {{ hostname }}"
-    insertafter: '^127\.0\.0\.1'
+    line: "{{ ansible_default_ipv4.address }}  {{ fqdn_machine | lower }} {{ nom | lower }}"
+    insertafter: 'EOF'
     state: present
     owner: root
     group: root
@@ -34,6 +34,12 @@
   apt:
     name: "*"
     state: latest
+
+- name: Suppression d'un package problématique.
+  apt:
+    name: elpa-magit
+    state: absent
+    purge: yes
 
 - name: Installation des packages du rôle.
   apt:
@@ -47,9 +53,60 @@
     executable: pip3
     state: latest
 
+- name: Arret de chrony.
+  systemd:
+    name: chrony
+    state: stopped
+    enabled: yes
+
 - name: Configuration de la timezone.
-  community.general.timezone:
+  timezone:
     name: Europe/Paris
+
+- name: Copie du script de config de la machine.
+  template:
+    src: templates/configmachine.j2
+    dest: /root/configmachine.sh
+    backup: no
+    owner: root
+    group: root
+    mode: 0700
+
+- name: Execution du script de config.
+  shell: ./configmachine.sh
+  args:
+    chdir: /root/
+    executable: /bin/bash
+  register: var_config
+  failed_when: var_config.rc != 0
+  changed_when: var_config.rc == 0
+
+- name: Configuration de chrony.
+  template:
+    src: templates/chrony.j2
+    dest: /etc/chrony.conf
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Redémarrage de chrony.
+  systemd:
+    name: chrony
+    state: started
+    enabled: yes
+
+- name: Ouverture d'un port pour le service chrony.
+  firewalld:
+    service: ntp
+    permanent: yes
+    state: enabled
+    immediate: yes
+
+- name: Suppression du script de config.
+  file:
+    path: /root/configmachine.sh
+    state: absent
 
 - name: Configuration du ssh.
   template:
@@ -61,7 +118,49 @@
     mode: 0644
   with_items:
     - { fichier: 'sshd_config_orig.j2', chemin: '/etc/ssh/sshd_config', sauve: 'no' }
-    - { fichier: 'sshd_config_modif.j2', chemin: '/etc/ssh/sshd_config.d/01-sshd_ansible.conf', sauve: 'no' }
+    - { fichier: 'sshd_config_modif.j2', chemin: '/etc/ssh/sshd_config.d/sshd_ansible.conf', sauve: 'no' }
+
+- name: Copie de la banniére.
+  copy:
+    src: files/motd.txt
+    dest: /etc/motd.d/motd
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+
+- name: Activation de la banniére ssh.
+  lineinfile:
+    path: /etc/ssh/sshd_config.d/sshd_ansible.conf
+    regexp: "^#?PrintMotd"
+    line: "PrintMotd yes"
+    owner: root
+    group: root
+    mode: 0644
+    state: present
+
+- name: Suppression du motd cockpit.
+  file:
+    path: /etc/motd.d/cockpit
+    state: absent
+
+- name: Suppression de la mise à jour du motd.
+  file:
+    path: /etc/update-motd.d/10-uname
+    state: absent
+
+- name: Recharge de la config ssh.
+  systemd:
+    name: sshd
+    state: reloaded
+    enabled: yes
+
+- name: Ouverture d'un port pour le service ssh.
+  firewalld:
+    service: ssh
+    permanent: yes
+    state: enabled
+    immediate: yes
 
 - name: Création des répertoires pour les alias.
   file:
@@ -71,8 +170,8 @@
     mode: "{{ item.mode }}"
     state: directory
   with_items:
-    - {chemin: '/root/.alias', mode: '0644' }
-    - {chemin: '/etc/skel/.alias', mode: '0755' }
+    - { chemin: '/root/.alias', mode: '0644' }
+    - { chemin: '/etc/skel/.alias', mode: '0755' }
 
 - name: Copie des templates d'alias.
   template:
@@ -100,14 +199,37 @@
     - /etc/skel
     - /root
 
-- name: Copie des divers templates.
-  template:
-    src: templates/chrony.j2
-    dest: /etc/chrony.conf
-    backup: no
-    owner: root
-    group: root
-    mode: 0644
+- name: Vérification du démarrage de cockpit.
+  systemd:
+    name: cockpit
+    state: started
+    enabled: yes
+
+- name: Ouverture d'un port pour le service cockpit.
+  firewalld:
+    service: cockpit
+    permanent: yes
+    state: enabled
+    immediate: yes
+
+- name: Ouverture d'un port pour les services web.
+  firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  with_items:
+    - http
+    - https
+
+- name: Suppression de l'ancienne clé SSH sur la machine locale.
+  shell: 'sed -i "/{{ ansible_default_ipv4.address }}/d" $HOME/.ssh/known_hosts'
+  args:
+   executable: /bin/bash
+  delegate_to: localhost
+  register: var_sshkey
+  failed_when: var_sshkey.rc != 0
+  changed_when: var_sshkey.rc == 0
 
 - name: Redémarrage du serveur.
   reboot:
