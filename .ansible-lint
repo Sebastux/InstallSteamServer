@@ -17,7 +17,7 @@ warn_list:
   - 'document-end'
   - 'brackets'
   - 'ignore-errors'
-  - command-instead-of-shell
+  - 'command-instead-of-shell'
+  - 'command-instead-of-module'
 
 use_default_rules: true
-  
