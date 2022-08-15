@@ -239,7 +239,7 @@
 - name: Suppression de l'ancienne clé SSH sur la machine locale.
   shell: 'sed -i "/{{ ansible_default_ipv4.address }}/d" $HOME/.ssh/known_hosts'
   args:
-   executable: /bin/bash
+    executable: /bin/bash
   delegate_to: localhost
   register: var_sshkey
   failed_when: var_sshkey.rc != 0
