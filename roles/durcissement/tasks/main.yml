@@ -21,14 +21,3 @@
   with_items:
     - {regex: '^UMASK', ligne: 'UMASK           027'}
     - {regex: '^ENCRYPT_METHOD', ligne: 'ENCRYPT_METHOD SHA512'}
-
-- name: Ajout de la résolution du nom.
-  lineinfile:
-    path: /etc/hosts
-    line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }} {{ ansible_fqdn }}"
-    owner: root
-    group: root
-    mode: 0644
-    insertafter: EOF
-    state: present
-    backup: no
