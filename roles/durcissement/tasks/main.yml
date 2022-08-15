@@ -1,0 +1,34 @@
+---
+- name: Augmentation de la sécurité des mots de passe.
+  lineinfile:
+    path: /etc/pam.d/passwd
+    line: "password   required     pam_unix.so sha512 shadow nullok rounds=65536"
+    owner: root
+    group: root
+    mode: '0644'
+    state: present
+    backup: no
+
+- name: Modification de la variable umask et de la méthode de chiffrement.
+  lineinfile:
+    path: /etc/login.defs
+    regexp: "{{ item.regex }}"
+    line: "{{ item.ligne }}"
+    owner: root
+    group: root
+    mode: '0644'
+    state: present
+  with_items:
+    - {regex: '^UMASK', ligne: 'UMASK           027'}
+    - {regex: '^ENCRYPT_METHOD', ligne: 'ENCRYPT_METHOD SHA512'}
+
+- name: Ajout de la résolution du nom.
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }} {{ ansible_fqdn }}"
+    owner: root
+    group: root
+    mode: 0644
+    insertafter: EOF
+    state: present
+    backup: no
