@@ -1,0 +1,17 @@
+---
+- name: Suppression de compte.
+  hosts: serveur
+  remote_user: root
+  gather_facts: yes
+  vars_prompt:
+
+    - name: login
+      prompt: "Veuillez entrer l'identifiant du compte "
+      private: no
+
+  tasks:
+    - name: "Suppression du compte : {{ login }}"
+      user:
+        name: "{{ login }}"
+        state: absent
+        remove: yes
