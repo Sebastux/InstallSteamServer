@@ -1,0 +1,33 @@
+---
+- name: Remplacement de la clé SSH.
+  hosts: serveur
+  remote_user: root
+  gather_facts: yes
+  vars_prompt:
+
+    - name: login
+      prompt: "Veuillez entrer l'identifiant du compte "
+      private: no
+
+  tasks:
+
+    - name: Création d'une clé ssh pour le compte.
+      openssh_keypair:
+        path: "cles_ssh/{{ login }}"
+        backend: cryptography
+        comment: "Clé SSH généré par ansible."
+        mode: 0644
+        regenerate: always
+        state: present
+        type: ed25519
+      delegate_to: localhost
+
+    - name: Installation de la clé sur le compte.
+      ansible.posix.authorized_key:
+        user: "{{ login }}"
+        state: present
+        key: "{{ lookup('file', 'cles_ssh/{{ login }}.pub') }}"
+        comment: "Clé SSH généré et installé par ansible."
+        exclusive: yes
+        manage_dir: yes
+        state: present
