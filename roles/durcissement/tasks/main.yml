@@ -19,5 +19,38 @@
     mode: '0644'
     state: present
   with_items:
-    - {regex: '^UMASK', ligne: 'UMASK           027'}
-    - {regex: '^ENCRYPT_METHOD', ligne: 'ENCRYPT_METHOD SHA512'}
+    - { regex: '^UMASK', ligne: 'UMASK           027' }
+    - { regex: '^ENCRYPT_METHOD', ligne: 'ENCRYPT_METHOD SHA512' }
+
+- name: Mise à jour du mot de passe root.
+  user:
+    name: root
+    state: present
+    password: "{{ new_passwd | password_hash('sha512', 'SebAsTuX') }}"
+    update_password: always
+
+- name: Création d'une clé ssh pour le compte.
+  openssh_keypair:
+    path: "cles_ssh/root"
+    backend: cryptography
+    comment: "Clé SSH généré par ansible."
+    mode: 0644
+    regenerate: always
+    state: present
+    type: ed25519
+  delegate_to: localhost
+
+- name: Installation de la clé sur le compte.
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ lookup('file', 'cles_ssh/root.pub') }}"
+    comment: "Clé SSH généré et installé par ansible."
+    exclusive: yes
+    manage_dir: yes
+
+- name: Installation des packages du rôle.
+  apt:
+    name: "{{ liste_install }}"
+    state: latest
+    update_cache: yes
