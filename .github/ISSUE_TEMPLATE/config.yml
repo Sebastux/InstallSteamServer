@@ -1,1 +1,14 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Page d'accueil du jeux.
+    url: https://store.steampowered.com/app/526870/Satisfactory/
+    about: Se rendre sur la page steam du jeu.
+  - name: Page d'accueil du forum steam.
+    url: https://steamcommunity.com/app/526870/discussions/
+    about: Se rendre sur la page du forum steam staisfactory.
+  - name: Page d'accueil du discord Satisfactory.
+    url: https://discord.com/invite/satisfactory
+    about: Se rendre sur la page du discord de Satisfactory.
+  - name: Page d'accueil de la communauté francaise de Satisfactory.
+    url: https://satisfactoryfr.com/
+    about: Se rendre sur la page d'accueil de la communauté francaise de Satisfactory.
