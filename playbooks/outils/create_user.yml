@@ -23,7 +23,7 @@
       default: "{{ login }}"
 
   tasks:
-    - name: "Création du compte : {{ login }}".
+    - name: "Création du compte : {{ login }}."
       user:
         name: "{{ login }}"
         comment: "{{ commentaire }}"
@@ -44,11 +44,10 @@
       delegate_to: localhost
 
     - name: Installation de la clé sur le compte.
-      ansible.posix.authorized_key:
+      authorized_key:
         user: "{{ login }}"
         state: present
         key: "{{ lookup('file', 'cles_ssh/{{ login }}.pub') }}"
         comment: "Clé SSH généré et installé par ansible."
         exclusive: yes
         manage_dir: yes
-        state: present
