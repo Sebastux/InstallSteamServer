@@ -1,1 +1,4 @@
 ---
+liste_install: [ 'fail2ban', 'libpam-google-authenticator' ]
+
+new_passwd: "{{ root_passwd | default('P@ssW0rD01') }}"
