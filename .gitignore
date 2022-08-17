@@ -1,6 +1,5 @@
 # Ne pas prendre en compte le fichier inventaire de l'utilisateur.
 staging/inventory
-production/inventory
 staging/hosts
 production/hosts
 staging/host
