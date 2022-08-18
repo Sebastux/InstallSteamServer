@@ -54,3 +54,21 @@
     name: "{{ liste_install }}"
     state: latest
     update_cache: yes
+
+- name: Démarrage du pare-feu.
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Ouverture de port pour divers services.
+  firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  with_items:
+    - ssh
+    - http
+    - https
+    - cockpit
