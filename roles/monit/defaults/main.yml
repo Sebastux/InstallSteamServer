@@ -1,2 +1,11 @@
 ---
-# defaults file for monit
+version_role: 1.0.0
+
+liste_install: [ 'monit', 'lm_sensors', 'lm_sensors-libs', 'sysstat', 'monitorix',
+                 'wget', 'rrdtool', 'rrdtool-perl', 'perl-libwww-perl', 'perl-MailTools',
+                 'perl-MIME-Lite', 'perl-CGI', 'perl-DBI', 'perl-XML-Simple',
+                 'perl-Config-General', 'perl-HTTP-Server-Simple', 'perl-IO-Socket-SSL',
+                 'cockpit', 'cockpit-tests', 'cockpit-composer', 'cockpit-dashboard',
+                 'cockpit-packagekit', 'cockpit-networkmanager', 'cockpit-system' ]
+
+architecture_processeur: "{{ ansible_architecture }}"
