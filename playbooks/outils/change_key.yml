@@ -10,10 +10,18 @@
       private: no
 
   tasks:
+    - name: Suppression de l'ancienne clé SSH.
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "../../cles_ssh/{{ login }}"
+        - "../../cles_ssh/{{ login }}.pub"
+      delegate_to: localhost
 
     - name: Création d'une clé ssh pour le compte.
       openssh_keypair:
-        path: "cles_ssh/{{ login }}"
+        path: "../../cles_ssh/{{ login }}"
         backend: cryptography
         comment: "Clé SSH généré par ansible."
         mode: 0644
@@ -26,7 +34,7 @@
       authorized_key:
         user: "{{ login }}"
         state: present
-        key: "{{ lookup('file', 'cles_ssh/{{ login }}.pub') }}"
+        key: "{{ lookup('file', '../../cles_ssh/{{ login }}.pub') }}"
         comment: "Clé SSH généré et installé par ansible."
         exclusive: yes
         manage_dir: yes
