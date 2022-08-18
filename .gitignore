@@ -10,3 +10,6 @@ passwd.txt
 
 # Ne pas prendre en compte le répertoire d'environement virtuel.
 .venv
+
+# Ignorer les clés ssh.
+cles_ssh/*
