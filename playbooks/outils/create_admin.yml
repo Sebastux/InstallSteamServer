@@ -20,7 +20,7 @@
     - name: commentaire
       prompt: "Veuillez entrer un commentaire pour le compte "
       private: no
-      default: "{{ login }}"
+      default: "Créé automatiquement par ansible."
 
   tasks:
 
@@ -36,7 +36,7 @@
 
     - name: Création d'une clé ssh pour le compte.
       openssh_keypair:
-        path: "cles_ssh/{{ login }}"
+        path: "../../cles_ssh/{{ login }}"
         backend: cryptography
         comment: "Clé SSH généré par ansible."
         mode: 0644
@@ -49,7 +49,7 @@
       authorized_key:
         user: "{{ login }}"
         state: present
-        key: "{{ lookup('file', 'cles_ssh/{{ login }}.pub') }}"
+        key: "{{ lookup('file', '../../cles_ssh/{{ login }}.pub') }}"
         comment: "Clé SSH généré et installé par ansible."
         exclusive: yes
         manage_dir: yes
