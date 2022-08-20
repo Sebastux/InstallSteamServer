@@ -7,7 +7,11 @@ help: # Afficher l'aide.
 # ******** Installation des divers module du master ********
 
 install: # Installation complète du serveur Debian 10.
-				chmod 700 scripts/Installation.sh
+				chmod 700 scripts/installation.sh
+				scripts/Installation.sh
+
+monit: # Indisponnible pour l'instant.
+				chmod 700 scripts/monit.sh
 				scripts/Installation.sh
 
 # ******** Outils divers ********
