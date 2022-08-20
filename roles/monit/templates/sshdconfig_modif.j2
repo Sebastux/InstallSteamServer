@@ -1,0 +1,18 @@
+{{ ansible_managed | comment }}
+
+# Fichier de configuration du serveur ssh
+check file sshd_ansible.conf path /etc/ssh/sshd_config.d/sshd_ansible.conf
+
+# Hash du fichier
+if failed checksum and
+   expect the sum {{ sshdconf_modif.stat.checksum }}
+then alert
+
+# Envoi d’une alerte si la somme SHA1 du fichier change
+if changed sha1 checksum then stop
+if failed permission 644 then unmonitor
+if failed uid root then unmonitor
+if failed gid root then unmonitor
+
+# Ajout du fichier dans un groupe
+group fichierconfig

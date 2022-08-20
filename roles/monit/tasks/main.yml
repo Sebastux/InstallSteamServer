@@ -23,12 +23,19 @@
     state: stopped
     enabled: yes
 
-- name: Calcul du hash de sshd_config.
+- name: Calcul du hash de sshd_config par defaut.
   stat:
     path: /etc/ssh/sshd_config
     checksum_algorithm: sha1
     get_checksum: yes
-  register: sshdconf
+  register: sshdconf_defaut
+
+- name: Calcul du hash de sshd_config modifié.
+  stat:
+    path: /etc/ssh/sshd_config.d/sshd_ansible.conf
+    checksum_algorithm: sha1
+    get_checksum: yes
+  register: sshdconf_modif
 
 - name: Calcul du hash de monitrc.
   stat:
