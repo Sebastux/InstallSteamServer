@@ -18,7 +18,7 @@ clear
 # shellcheck source=/dev/null
 source .venv/bin/activate
 
-# Lancement de la création d'un comptenutilisateur.
+# Lancement de la création d'un compte utilisateur.
 ansible-playbook playbooks/outils/create_user.yml -i production
 
 # Sortie de l'environnement virtuel
