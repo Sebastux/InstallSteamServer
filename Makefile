@@ -14,35 +14,35 @@ durcissement: # Augmentation de la sécurité du système.
 				chmod 700 scripts/durcissement.sh
 				scripts/durcissement.sh
 
-monit: # Indisponnible pour l'instant.
+monit: # Indisponible pour l'instant.
 				chmod 700 scripts/monit.sh
 				scripts/Installation.sh
 
 # ******** Outils divers ********
 init: # Installer les outils afin de déployer la configuration de la machine.
 				chmod 700 scripts/outils/init.sh
-				scripts/init.sh
+				scripts/outils/init.sh
 
 update: # Mettre à jour les packages python et le dépôt.
 				chmod 700 scripts/outils/update.sh
-				scripts/update.sh
+				scripts/outils/update.sh
 
 user: # Créer un compte utilisateur.
 				chmod 700 scripts/outils/user.sh
-				scripts/user.sh
+				scripts/outils/user.sh
 
 admin: # Créer un compte sudoer (sudo).
 				chmod 700 scripts/outils/sudoers.sh
-				scripts/sudoers.sh
+				scripts/outils/sudoers.sh
 
-delete_user: # Supprimer un compte ainsi que son répertoire de connexion
+delete_user: # Supprimer un compte ainsi que son répertoire de connexion.
 				chmod 700 scripts/outils/delete_user.sh
-				scripts/update.sh
+				scripts/outils/delete_user.sh
 
 passwd: # Mettre à jour le  mot de passe d'un compte.
 				chmod 700 scripts/outils/passwd.sh
-				scripts/update.sh
+				scripts/outils/passwd.sh
 
 ssh_key: # Mettre à jour la clé ssh d'un compte.
 				chmod 700 scripts/outils/ssh_key.sh
-				scripts/update.sh
+				scripts/outils/ssh_key.sh
