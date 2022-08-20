@@ -6,7 +6,7 @@ help: # Afficher l'aide.
 
 # ******** Installation des divers module du master ********
 
-install: # Installation complète du serveur Debian 10.
+install: # Installation complète du serveur Debian 11.
 				chmod 700 scripts/installation.sh
 				scripts/Installation.sh
 
