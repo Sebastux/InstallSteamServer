@@ -21,7 +21,6 @@ admin: # Créer un compte sudoer.
 				chmod 700 scripts/xxx.sh
 				scripts/xxx.sh
 
-test: # Test
-				clear; \
-				source .venv/bin/activate; \
-				pip list
+update: # Mettre à jour les packages python et le dépôt.
+				chmod 700 scripts/update.sh
+				scripts/update.sh
