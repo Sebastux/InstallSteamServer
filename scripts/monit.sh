@@ -19,7 +19,7 @@ clear
 source .venv/bin/activate
 
 # Lancement de l'installation complete du master.
-ansible-playbook playbooks/monit.sh -i production
+ansible-playbook playbooks/monit.yml -i production
 
 # Sortie de l'environnement virtuel
 deactivate
