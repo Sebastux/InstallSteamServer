@@ -31,3 +31,6 @@ pip install ansible
 
 # Sortie de l'environnement virtuel
 deactivate
+
+# Copie du fichier d'inventaire dans le répertoire de prod.
+cp ficscommun/Inventaire/inventory production/inventory
