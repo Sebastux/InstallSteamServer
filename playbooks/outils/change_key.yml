@@ -23,7 +23,7 @@
       openssh_keypair:
         path: "../../cles_ssh/{{ login }}"
         backend: cryptography
-        comment: "Clé SSH généré par ansible."
+        comment: "Clé SSH générée par ansible."
         mode: 0644
         regenerate: always
         state: present
@@ -35,6 +35,6 @@
         user: "{{ login }}"
         state: present
         key: "{{ lookup('file', '../../cles_ssh/{{ login }}.pub') }}"
-        comment: "Clé SSH généré et installé par ansible."
+        comment: "Clé SSH générée et installée par ansible."
         exclusive: yes
         manage_dir: yes
