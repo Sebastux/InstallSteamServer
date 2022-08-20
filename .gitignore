@@ -1,9 +1,9 @@
 # Ne pas prendre en compte le fichier inventaire de l'utilisateur.
-staging/inventory
+staging/inventory*
 staging/hosts
+production/inventory*
 production/hosts
-staging/host
-production/host
+
 
 # Ne pas prendre en compte le fichier contenant le mot de passe du vault.
 passwd.txt
