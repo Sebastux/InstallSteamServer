@@ -3,7 +3,7 @@
 
 #==============================================================================
 # Titre            : Installation.sh
-# Description      : Script de lancement de l'installation compete du master
+# Description      : Script de lancement de l'installation complète du master.
 # Auteur           : Sebastux
 # Date             : 20/08/2022
 # Modification     : 20/08/2022
