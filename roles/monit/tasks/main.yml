@@ -1,42 +1,27 @@
 ---
 - name: "Mise à jour du système."
-  dnf:
+  apt:
     name: "*"
     state: latest
     update_cache: yes
 
 - name: Installation des packages du role.
-  dnf:
+  apt:
     name: "{{ liste_install }}"
     state: latest
 
-- name: Ajout d'une règle dans le pare-feu pour monitorix et monit.
+- name: Ajout d'une règle dans le pare-feu pour monit.
   firewalld:
-    port: "{{ item }}"
+    port: "{{ port_ecoute }}/tcp"
     permanent: True
     state: enabled
     immediate: yes
-  with_items:
-    - 8080/tcp
-    - "{{ port_ecoute }}/tcp"
 
-- name: Arret de plusieurs services.
+- name: Arret du service monit.
   systemd:
-    name: "{{ item }}"
+    name: monit
     state: stopped
     enabled: yes
-  with_items:
-    - monitorix
-    - monit
-
-- name: Installation du fichier de configuration de monitorix.
-  template:
-    src: templates/monitorixconf.j2
-    dest: /etc/monitorix/monitorix.conf
-    owner: root
-    group: root
-    mode: 0644
-    backup: no
 
 - name: Calcul du hash de sshd_config.
   stat:
@@ -59,13 +44,6 @@
     get_checksum: yes
   register: chronyd
 
-- name: Calcul du hash de monitorix.conf.
-  stat:
-    path: /etc/monitorix/monitorix.conf
-    checksum_algorithm: sha1
-    get_checksum: yes
-  register: monitorix
-
 - name: Calcul du hash de jail.conf.
   stat:
     path: /etc/fail2ban/jail.local
@@ -82,24 +60,23 @@
     mode: "{{ item.mode }}"
     backup: no
   with_items:
-    - {source: 'chronyc.j2', destination: 'monit.d/chronyc.conf', mode: '0644' }
-    - {source: 'chronyd.j2', destination: 'monit.d/chronyd.conf', mode: '0644' }
-    - {source: 'crond.j2', destination: 'monit.d/crond.conf', mode: '0644' }
-    - {source: 'chronyconf.j2', destination: 'monit.d/chronyconf.conf', mode: '0644' }
-    - {source: 'free.j2', destination: 'monit.d/free.conf', mode: '0644' }
-    - {source: 'rsyslog.j2', destination: 'monit.d/rsyslog.conf', mode: '0644' }
-    - {source: 'smonitrc.j2', destination: 'monit.d/monitrc.conf', mode: '0644' }
-    - {source: 'sshd.j2', destination: 'monit.d/sshd.conf', mode: '0644' }
-    - {source: 'df.j2', destination: 'monit.d/df.conf', mode: '0644' }
-    - {source: 'machine.j2', destination: 'monit.d/machine.conf', mode: '0644' }
-    - {source: 'sensors.j2', destination: 'monit.d/sensors.conf', mode: '0644' }
-    - {source: 'sshdconfig.j2', destination: 'monit.d/sshdconfig.conf', mode: '0644' }
-    - {source: 'top.j2', destination: 'monit.d/top.conf', mode: '0644' }
-    - {source: 'monitrc.j2', destination: 'monitrc', mode: '0600' }
-    - {source: 'logmonit.j2', destination: 'logrotate.d/monit', mode: '0644' }
-    - {source: 'monitorix.j2', destination: 'monit.d/monitorix.conf', mode: '0644' }
-    - {source: 'smonitorixconf.j2', destination: 'monit.d/monitorixconf.conf', mode: '0644' }
-    - {source: 'jailconf.j2', destination: 'monit.d/jailconf.conf', mode: '0644' }
+    - { source: 'chronyc.j2', destination: 'monit.d/chronyc.conf', mode: '0644' }
+    - { source: 'chronyd.j2', destination: 'monit.d/chronyd.conf', mode: '0644' }
+    - { source: 'crond.j2', destination: 'monit.d/crond.conf', mode: '0644' }
+    - { source: 'chronyconf.j2', destination: 'monit.d/chronyconf.conf', mode: '0644' }
+    - { source: 'free.j2', destination: 'monit.d/free.conf', mode: '0644' }
+    - { source: 'rsyslog.j2', destination: 'monit.d/rsyslog.conf', mode: '0644' }
+    - { source: 'smonitrc.j2', destination: 'monit.d/monitrc.conf', mode: '0644' }
+    - { source: 'sshd.j2', destination: 'monit.d/sshd.conf', mode: '0644' }
+    - { source: 'df.j2', destination: 'monit.d/df.conf', mode: '0644' }
+    - { source: 'machine.j2', destination: 'monit.d/machine.conf', mode: '0644' }
+    - { source: 'sensors.j2', destination: 'monit.d/sensors.conf', mode: '0644' }
+    - { source: 'sshdconfig.j2', destination: 'monit.d/sshdconfig.conf', mode: '0644' }
+    - { source: 'top.j2', destination: 'monit.d/top.conf', mode: '0644' }
+    - { source: 'monitrc.j2', destination: 'monitrc', mode: '0600' }
+    - { source: 'logmonit.j2', destination: 'logrotate.d/monit', mode: '0644' }
+    - { source: 'monitorix.j2', destination: 'monit.d/monitorix.conf', mode: '0644' }
+    - { source: 'jailconf.j2', destination: 'monit.d/jailconf.conf', mode: '0644' }
 
 - name: Copie du template smarttools.
   template:
@@ -109,52 +86,3 @@
     group: root
     mode: 0644
     backup: no
-  when: architecture_processeur == 'x86_64'
-
-- name: Ajout d'une règle dans le pare-feu pour cockpit.
-  firewalld:
-    service: cockpit
-    permanent: True
-    state: enabled
-    immediate: yes
-
-- name: Gestion d'erreur de copie de template.
-  block:
-    - name: Création du fichier facts (playbook).
-      template:
-        src: ../ficscommun/templates/fact.j2
-        dest: /etc/ansible/facts.d/monit.fact
-        owner: root
-        group: root
-        backup: no
-        mode: 0644
-  rescue:
-    - name: Création du fichier facts (site).
-      template:
-        src: ficscommun/templates/fact.j2
-        dest: /etc/ansible/facts.d/monit.fact
-        owner: root
-        group: root
-        backup: no
-        mode: 0644
-
-- name: Création du fichiers de fact.
-  ini_file:
-    path: /etc/ansible/facts.d/monit.fact
-    section: installation
-    option: "{{ item.option }}"
-    value: "{{ item.valeur }}"
-    mode: 0600
-    backup: no
-  with_items:
-    - {option: 'playbook_version', valeur: "{{ version_playbook }}" }
-    - {option: 'role_version', valeur: "{{ version_role }}" }
-    - {option: 'type_machine', valeur: "{{ architecture_processeur }}" }
-    - {option: 'jour_installation', valeur: "{{ ansible_date_time.weekday }}" }
-    - {option: 'date_installation', valeur: "{{ ansible_date_time.day }}/{{ ansible_date_time.month }}/{{ ansible_date_time.year }}" }
-    - {option: 'heure_installation', valeur: "{{ ansible_date_time.time }}" }
-
-- name: Redémarrage du serveur.
-  reboot:
-    msg: "Redémarrage automatique du serveur par ansible."
-    reboot_timeout: 300
