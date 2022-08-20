@@ -19,7 +19,7 @@ clear
 source .venv/bin/activate
 
 # Lancement de la création d'un compte utilisateur.
-ansible-playbook playbooks/outils/ssh_key.yml -i production
+ansible-playbook playbooks/outils/change_key.yml -i production
 
 # Sortie de l'environnement virtuel
 deactivate

@@ -19,7 +19,7 @@ clear
 source .venv/bin/activate
 
 # Lancement de la création d'un comptenutilisateur sudoer.
-ansible-playbook playbooks/outils/create_admin.yml-i production
+ansible-playbook playbooks/outils/create_admin.yml -i production
 
 # Sortie de l'environnement virtuel
 deactivate
