@@ -9,7 +9,8 @@ if failed checksum and
 then alert
 
 # Envoi d’une alerte si la somme SHA1 du fichier change
-if changed sha1 checksum then stop
+if failed checksum and expect the {{ monitrc.stat.checksum }}
+then alert
 
 # Ajout du fichier dans un groupe
 group fichierconfig
