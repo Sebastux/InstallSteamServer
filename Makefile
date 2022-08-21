@@ -14,9 +14,9 @@ durcissement: # Augmentation de la sécurité du système.
 				chmod 700 scripts/durcissement.sh
 				scripts/durcissement.sh
 
-monit: # Indisponible pour l'instant.
+monit: # Installation et configuration de monit.
 				chmod 700 scripts/monit.sh
-				scripts/Installation.sh
+				scripts/monit.sh
 
 # ******** Outils divers ********
 init: # Installer les outils afin de déployer la configuration de la machine.
