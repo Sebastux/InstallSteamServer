@@ -1,5 +1,7 @@
 ---
-liste_install: [ 'monit', 'lm-sensors', 'sysstat', 'wget', 'rrdtool' ]
+liste_install: [ 'monit', 'lm-sensors', 'sysstat', 'wget', 'rrdtool',
+                 'firewalld', 'aptitude', 'iftop', 'iotop', 'itop' ,
+                 'htop' ]
 
 
 # ************* Configuration de monit *************
@@ -20,10 +22,15 @@ mdp_utils: "{{ user_passwd }}"
 port_ecoute: "{{ port_monit }}"
 
 # Autoriser l'utilisation du compte invité en lecture seule. Les valeurs sont true ou false
-autorisation_guest: "{{ activate_user }}"
+autorisation_guest: "{{ activate_user | bool }}"
 
 # Autoriser l'accès en local. Les valeurs sont true ou false
 autorisation_localhost: false
 
 # Utiliser ou pas le ssl pour l'interface web. Valeur enable ou disable.
-ssl_enable: "{{ activate_ssl }}"
+ssl_enable: "{{ activate_ssl | bool }}"
+
+temps_demarrage: 10
+temps_sureveillance: 15
+
+version_monit: "5.32.0"
