@@ -1,4 +1,4 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 
 # Surveillance du service SSHD
 check process ServeurSsh with pidfile /var/run/sshd.pid

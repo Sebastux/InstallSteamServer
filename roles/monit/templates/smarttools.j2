@@ -1,4 +1,4 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 
 # Surveillance de l'état smart du disque
 check program Smart_test with path "/usr/sbin/smartctl -s on -a /dev/sda"

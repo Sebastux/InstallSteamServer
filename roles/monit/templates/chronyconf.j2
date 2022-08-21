@@ -1,4 +1,4 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 
 # Surveillance du fichier de config du deamon ntpd
 check file chrony.conf with path /etc/chrony.conf
