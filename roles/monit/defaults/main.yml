@@ -1,6 +1,6 @@
 ---
 liste_install: [ 'monit', 'lm-sensors', 'sysstat', 'wget', 'rrdtool',
-                 'firewalld', 'aptitude', 'iftop', 'iotop', 'itop' ,
+                 'firewalld', 'aptitude', 'iftop', 'iotop', 'itop',
                  'htop' ]
 
 
