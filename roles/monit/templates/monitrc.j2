@@ -40,8 +40,8 @@ set logfile /var/log/monit.log
 ## enable SSL for the HTTP interface.
 #
 set httpd
-    port {{ port_ecoute }} # Choix du port d’écoute
-    use address {{ ansible_default_ipv4.address }} # Adresse d'écoute externe
+    port {{ port_ecoute }}
+    use address {{ ansible_default_ipv4.address }}
 {% if autorisation_localhost is sameas true %}
     allow localhost  # Connexion autorisé depuis localhost
 {% endif %}
@@ -50,7 +50,7 @@ set httpd
 {% if autorisation_guest is sameas true %}
     allow {{ cpte_utils }}:{{ mdp_utils }} read-only # compte utilisateur
 {% endif %}
-    signature enable        # Masquer la version de monit
+    signature disable        # Masquer la version de monit
 {% if ssl_enable is sameas true %}
     SSL ENABLE
     pemfile /etc/monit.d/monit.pem

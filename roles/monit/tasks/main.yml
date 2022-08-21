@@ -10,15 +10,167 @@
     name: "{{ liste_install }}"
     state: latest
 
-- name: Ajout d'une règle dans le pare-feu pour monit.
-  firewalld:
-    port: "{{ port_ecoute }}/tcp"
-    permanent: True
-    state: enabled
-    immediate: yes
-
 - name: Arret du service monit.
   systemd:
     name: monit
     state: stopped
+    enabled: yes
+
+- name: Vérification de l'execution du pare-feu.
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Ajout d'une règle dans le pare-feu pour monit.
+  firewalld:
+    port: "{{ port_ecoute }}/tcp"
+    permanent: true
+    state: enabled
+    immediate: yes
+
+- name: Création du répertoire de stockage des profiles.
+  file:
+    path: /etc/monit.d
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+    recurse: no
+
+- name: Installation du fichier de configuration de monit.
+  template:
+    src: templates/monitrc.j2
+    dest: /etc/monitrc
+    owner: root
+    group: root
+    mode: 0600
+    backup: no
+
+- name: Calcul du hash du fichier de configuration de monit.
+  stat:
+    path: /etc/monit/monitrc
+    checksum_algorithm: sha1
+    get_checksum: yes
+  register: monitrc
+
+- name: Installation du template du fichier de configuration de monit.
+  template:
+    src: templates/smonitrc.j2
+    dest: /etc/monit.d/monitrc.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+    validate: /usr/bin/monit -t %s
+
+- name: Installation du fichier de logrotate de monit.
+  template:
+    src: templates/logmonit.j2
+    dest: /etc/logrotate.d/monit
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+    validate: /usr/bin/monit -t %s
+
+- name: Copie des templates de divers outils.
+  template:
+    src: "templates/{{ item.source }}"
+    dest: "/etc/monit.d/{{ item.destination }}"
+    owner: root
+    group: root
+    mode: 0600
+    backup: no
+    validate: /usr/bin/monit -t %s
+  with_items:
+    - { source: 'crond.j2', destination: 'crond.conf' }
+    - { source: 'free.j2', destination: 'free.conf' }
+    - { source: 'rsyslog.j2', destination: 'rsyslog.conf' }
+    - { source: 'df.j2', destination: 'df.conf' }
+    - { source: 'machine.j2', destination: 'machine.conf' }
+    - { source: 'top.j2', destination: 'top.conf' }
+
+- name: Calcul du hash de sshd_config par défaut.
+  stat:
+    path: /etc/ssh/sshd_config
+    checksum_algorithm: sha1
+    get_checksum: yes
+  register: sshdconf_defaut
+
+- name: Installation du profile du service et du fichier de conf sshd par défaut.
+  template:
+    src: "templates/{{ item.source }}"
+    dest: "/etc/monit.d/{{ item.destination }}"
+    owner: root
+    group: root
+    mode: 0600
+    backup: no
+    validate: /usr/bin/monit -t %s
+  with_items:
+    - { source: 'sshdconfig_defaut.j2', destination: 'sshdconfig_defaut.conf' }
+    - { source: 'sshd.j2', destination: 'sshd.conf' }
+
+- name: Calcul du hash de sshd_config modifié.
+  stat:
+    path: /etc/ssh/sshd_config.d/sshd_ansible.conf
+    checksum_algorithm: sha1
+    get_checksum: yes
+  register: sshdconf_modif
+
+- name: Installation profil du fichier de config modifié.
+  template:
+    src: templates/sshdconfig_modif.j2
+    dest: /etc/monit.d/sshdconfig_modif.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+    validate: /usr/bin/monit -t %s
+  when: sshdconf_modif.stat.exists
+
+- name: Calcul du hash du fichier de conf chrony.
+  stat:
+    path: /etc/chrony.conf
+    checksum_algorithm: sha1
+    get_checksum: yes
+  register: chronyd
+
+- name: Installation du profile du service et du fichier de conf chrony.
+  template:
+    src: "templates/{{ item.source }}"
+    dest: "/etc/monit.d/{{ item.destination }}"
+    owner: root
+    group: root
+    mode: 0600
+    backup: no
+    validate: /usr/bin/monit -t %s
+  with_items:
+    - { source: 'chronyc.j2', destination: 'chronyc.conf' }
+    - { source: 'chronyd.j2', destination: 'chronyd.conf' }
+    - { source: 'chronyconf.j2', destination: 'chronyconf.conf' }
+  when: chronyd.stat.exists
+
+- name: Calcul du hash de jail.conf.
+  stat:
+    path: /etc/fail2ban/jail.local
+    checksum_algorithm: sha1
+    get_checksum: yes
+  register: jail
+
+- name: Installation profil du fichier de fail2ban.
+  template:
+    src: templates/jailconf.j2
+    dest: /etc/monit.d/jailconf.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+    validate: /usr/bin/monit -t %s
+  when: jail.stat.exists
+
+- name: Démarage du service monit.
+  systemd:
+    name: monit
+    state: started
     enabled: yes
