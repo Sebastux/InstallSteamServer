@@ -1,4 +1,4 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 
 # Surveillance du deamon chronyd
 check process Horloge with pidfile /var/run/chrony/chronyd.pid

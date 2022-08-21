@@ -1,4 +1,4 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 
 # Affichage de la liste des processus.
 check program Liste_processus with path "/usr/bin/top -n1 -b"
