@@ -10,6 +10,10 @@ install: # Installation complète du serveur Debian 11.
 				chmod 700 scripts/installation.sh
 				scripts/installation.sh
 
+tronccommun: # Installation du tronc commun et configuration de la machine.
+				chmod 700 scripts/tronccommun.sh
+				scripts/tronccommun.sh
+
 durcissement: # Augmentation de la sécurité du système.
 				chmod 700 scripts/durcissement.sh
 				scripts/durcissement.sh
