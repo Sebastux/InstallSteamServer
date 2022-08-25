@@ -1,0 +1,22 @@
+[
+  {
+    "search": "{vfed}",
+    "replace": "36",
+    "eval": false
+  },
+  {
+    "search": "{vdebdep}",
+    "replace": "10",
+    "eval": false
+  },
+  {
+    "search": "{vdebfin}",
+    "replace": "11",
+    "eval": false
+  },
+  {
+    "search": "{vansible}",
+    "replace": "6.x",
+    "eval": false
+  }
+]
