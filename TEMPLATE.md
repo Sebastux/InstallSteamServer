@@ -34,7 +34,10 @@ Rendez-vous dans le répertoire nouvellement créé à l’aide de la commande s
  cd InstallSteamServer
 ```
 
-
+Initialisez l’environement de travail avec la commande suivante :
+```shell
+ make init
+```
 ## **Variables** :
 Plusieurs variables sont à compléter pour que tout fonctionne normalement.
 
