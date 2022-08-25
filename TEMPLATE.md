@@ -1,36 +1,71 @@
-# InstallSteamServer
-Divers roles Ansible permettant de migrer de debian 10 à debian 11 et d'installer un serveur steam.
+<!-- [START BADGES] -->
 
-![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
-
-![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
-
-![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white)
-
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-
-![Shell Script](https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white)
-
-![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)
-
-![Jinja](https://img.shields.io/badge/jinja-white.svg?style=for-the-badge&logo=jinja&logoColor=black)
-
-![nVIDIA](https://img.shields.io/badge/nVIDIA-%2376B900.svg?style=for-the-badge&logo=nVIDIA&logoColor=white)
-
-![Steam](https://img.shields.io/badge/steam-%23000000.svg?style=for-the-badge&logo=steam&logoColor=white)
-
-![Debian](https://img.shields.io/badge/Debian-A81D33?style=for-the-badge&logo=debian&logoColor=white)
-
-![Fedora](https://img.shields.io/badge/Fedora-294172?style=for-the-badge&logo=fedora&logoColor=white)
-
+<!-- [END BADGES] -->
 ***
-Liste des packages à Installer :
+
+# **InstallSteamServer** :
+
+Cet ensemble de rôles et de playbooks permet l’installation et la configuration
+d’un serveur steam. Cette installation se passe en plusieurs étapes
+et va de l’upgrade de debian 10 à debian 11 à la configuration de la machine
+en passant par l’installation d’outil de supervision et le durcissement  de
+l’OS.
+
+
+## **Prérequis** :
+Tout a été développé et testé sous FEDORA {vfed} avec la version {vansible} d’ansible.<br />
+Le serveur en debian {vdebdep} qui sera migré en version {vdebfin}.
+Les outils de développement afin d’avoir la commande make disponible.
+
+## **Configuration de la machine de commande** :
+Installer les packages suivant pour faire fonctionner l’ensemble :
 
  ```shell
   dnf install -y git-all make extra-cmake-modules sshpass
 ```
-***
-Installer le dépot en local :
+
+Ensuite cloner le dépot :
+
 ```shell
  git clone https://github.com/Sebastux/InstallSteamServer.git
 ```
+Rendez-vous dans le répertoire nouvellement créé à l’aide de la commande suivante :
+```shell
+ cd InstallSteamServer
+```
+
+
+## **Variables** :
+Plusieurs variables sont à compléter pour que tout fonctionne normalement.
+
+## **Systémes d'exploitation** :
+
+FEDORA {vfed} (conseillé) pour le noeud ansible.
+debian {vdebdep} qui sera migré en version {vdebfin}.
+
+## **Outils** :
+Ansible {vansible} pour l’exécution des playbooks.
+Make dans sa version la plus récente.
+
+## **Fonctionnalités** :
+
+
+
+## **Lancement** :
+Entrez la commande make afin d’avoir la liste des options disponnible.
+Il suffit ensuite d’entrer la commande make option.
+
+Par exemple pour faire une installatioh complète, il suffit d’entrer la commande suivante :  
+
+```shell
+ make install
+```
+
+## **Auteur** :
+Sebastux.
+
+## **Readme des différents rôles** :
+
+
+
+### **Versions** :
