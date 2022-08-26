@@ -18,5 +18,30 @@
     "search": "{vansible}",
     "replace": "6.x",
     "eval": false
+  },
+  {
+    "search": "{vdrci}",
+    "replace": "1.0",
+    "eval": false
+  },
+  {
+    "search": "{vmonit}",
+    "replace": "1.0",
+    "eval": false
+  },
+  {
+    "search": "{vsteam}",
+    "replace": "1.0",
+    "eval": false
+  },
+  {
+    "search": "{vtronc}",
+    "replace": "1.0",
+    "eval": false
+  },
+  {
+    "search": "{vupgdb}",
+    "replace": "1.0",
+    "eval": false
   }
 ]
