@@ -68,16 +68,12 @@ Par exemple pour faire une installatioh complète, il suffit d’entrer la comma
 ## **Auteur** :
 Sebastux.
 
-## **Readme des différents rôles** :
+## **Readme et versions des différents rôles** :
 
-|      Rôle      |     Readme     | Version       |
-|      :---:     |     :---:      | :---:         |
-| durcissement   | [Durcissement](roles/durcissement/README.md) | git status    |
-| monit          | [Monit](roles/monit/Readme.md)       | git diff      |
-| steam          | [Steam](roles/steam/README.md)               |               |
-| tronccomun     | [Tronccomun](roles/tronccommun/README.md)     |               |
-| upgradedebian  | [Upgradedebian](roles/upgradedebian/README.md)|               |
-
-
-
-### **Versions** :
+|      Rôle      |                      Readme                    | Version       |
+|      :---:     |                      :---:                     | :---:         |
+| durcissement   | [Durcissement](roles/durcissement/README.md)   | {vdrci}       |
+| monit          | [Monit](roles/monit/Readme.md)                 | {vmonit}      |
+| steam          | [Steam](roles/steam/README.md)                 | {vsteam}      |
+| tronccomun     | [Tronccomun](roles/tronccommun/README.md)      | {vtronc}      |
+| upgradedebian  | [Upgradedebian](roles/upgradedebian/README.md) | {vupgdb}      |
