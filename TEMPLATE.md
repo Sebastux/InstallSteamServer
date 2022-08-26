@@ -77,3 +77,7 @@ Sebastux.
 | steam          | [Steam](roles/steam/README.md)                 | {vsteam}      |
 | tronccomun     | [Tronccomun](roles/tronccommun/README.md)      | {vtronc}      |
 | upgradedebian  | [Upgradedebian](roles/upgradedebian/README.md) | {vupgdb}      |
+
+## **Versions** :
+
+![alt text](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg?style=for-the-badge "Logo Version")
