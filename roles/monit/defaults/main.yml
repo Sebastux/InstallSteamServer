@@ -1,7 +1,9 @@
 ---
 liste_install: [ 'monit', 'lm-sensors', 'sysstat', 'wget', 'rrdtool',
                  'firewalld', 'aptitude', 'iftop', 'iotop', 'itop',
-                 'htop' ]
+                 'htop', 'zlib1g-dev', 'libpam0g-dev','libssl-dev',
+                 'libtool', 'bison', 'flex', 'autoconf', 'build-essential',
+                 'make' ]
 
 
 # ************* Configuration de monit *************
@@ -19,7 +21,7 @@ cpte_utils: "{{ user_monit }}"
 mdp_utils: "{{ user_passwd }}"
 
 # Configuration du port d'écoute permettant l'accès à l'interface web.
-port_ecoute: "{{ port_monit }}"
+port_ecoute: "{{ port_monit | default('2812') }}"
 
 # Autoriser l'utilisation du compte invité en lecture seule. Les valeurs sont true ou false
 autorisation_guest: "{{ activate_user | bool }}"

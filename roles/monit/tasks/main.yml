@@ -1,4 +1,12 @@
 ---
+- name: Création du répertoire de travail.
+  file:
+    path: /root/travail
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
 - name: "Mise à jour du système."
   apt:
     name: "*"
@@ -16,7 +24,7 @@
     state: stopped
     enabled: yes
 
-- name: Vérification de l'execution du pare-feu.
+- name: Vérification de l'exécution du pare-feu.
   systemd:
     name: firewalld
     state: started
@@ -41,7 +49,7 @@
 - name: Installation du fichier de configuration de monit.
   template:
     src: templates/monitrc.j2
-    dest: /etc/monitrc
+    dest: /etc/monit/monitrc
     owner: root
     group: root
     mode: 0600
@@ -168,6 +176,44 @@
     backup: no
     validate: /usr/bin/monit -t %s
   when: jail.stat.exists
+
+- name: "Téléchargement de la version {{ version_monit }} de monit."
+  get_url:
+    url: "https://mmonit.com/monit/dist/monit-{{ version_monit }}.tar.gz"
+    dest: /root/travail
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Déconpression de l’archive.
+  unarchive:
+    src: "/root/travail/monit-{{ version_monit }}.tar.gz"
+    dest: /root/travail
+    remote_src: yes
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copie du script de compilation.
+  template:
+    src: templates/compilation.j2
+    dest: "/root/travail/monit-{{ version_monit }}/compilation.sh"
+    owner: root
+    group: root
+    mode: 0700
+    backup: no
+
+- name: "Compilation et installation de la version {{ version_monit }} de monit."
+  shell:
+    cmd: ./compilation.sh
+    chdir: "/root/travail/monit-{{ version_monit }}"
+  args:
+    executable: /bin/bash
+
+- name: Suppression du répertoire de travail.
+  file:
+    path: /root/travail
+    state: absent
 
 - name: Démarage du service monit.
   systemd:

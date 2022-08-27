@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 
 # Fichier de configuration du serveur ssh
-check file monitrc path /etc/monitrc
+check file monitrc path /etc/monit/monitrc
 
 # Hash du fichier
 if failed checksum and
