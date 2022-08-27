@@ -1,7 +1,8 @@
 ---
-liste_install: [ 'aptitude',  'cockpit', 'cockpit-doc', 'cockpit-networkmanager',
-                 'cockpit-packagekit', 'cockpit-shell', 'cockpit-ssh',
-                 'cockpit-storaged', 'cockpit-system', 'cockpit-users',
+liste_install: [ 'aptitude', 'cockpit', 'cockpit-doc', 'cockpit-networkmanager',
+                 'cockpit-packagekit', 'cockpit-pcp', 'cockpit-shell',
+                 'cockpit-ssh', 'cockpit-storaged', 'cockpit-system',
+                 'cockpit-systemd', 'cockpit-users', 'cockpit-ws',
                  'firewalld', 'chrony', 'python3-all', 'build-essential',
                  'cmake', 'p7zip-full', 'smartmontools', 'htop', 'bpytop',
                  'sudo', 'mlocate', 'apt-file', 'net-tools', 'atop', 'powertop',
