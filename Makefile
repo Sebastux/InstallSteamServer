@@ -26,6 +26,10 @@ config_vm: # Configuration de la machine.
 				chmod 700 scripts/configuration.sh
 				scripts/configuration.sh
 
+upgrade: # Migrer la VM en debian 11
+				chmod 700 scripts/upgrade.sh
+				scripts/upgrade.sh
+
 # ******** Outils divers ********
 init: # Installer les outils afin de déployer la configuration de la machine.
 				chmod 700 scripts/outils/init.sh

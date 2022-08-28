@@ -1,0 +1,6 @@
+---
+- name: Passage de debian 10 à debian 11.
+  hosts: serveur
+  gather_facts: yes
+  roles:
+    - upgradedebian

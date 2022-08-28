@@ -7,22 +7,48 @@
     group: root
     mode: '0644'
 
-- name: Installation des packages nécessaire à la migration.
-  apt:
-    name: "{{ liste_packages_migration }}"
-    state: latest
-    clean: yes
-    update_cache: yes
+- name: Gestion d'erreur lors de l'installation des packages du role.
+  block:
+    - name: Installation des packages nécessaire à la migration.
+      apt:
+        name: "{{ liste_packages_migration }}"
+        state: latest
+        clean: yes
+        update_cache: yes
 
-- name: Mise à jour de la VM.
-  apt:
-    name: "*"
-    state: latest
+    - name: Mise à jour de la VM.
+      apt:
+        name: "*"
+        state: latest
+  rescue:
+    - name: Déblocage du passage à debian 11.
+      shell: apt-get update --allow-releaseinfo-change
+      args:
+        executable: /bin/bash
+      register: var_apt
+      failed_when: var_apt.rc != 0
+      changed_when: var_apt.rc == 0
+
+    - name: Installation des packages nécessaire à la migration.
+      apt:
+        name: "{{ liste_packages_migration }}"
+        state: latest
+        clean: yes
+        update_cache: yes
+
+    - name: Mise à jour de la VM.
+      apt:
+        name: "*"
+        state: latest
 
 - name: Redémarrage du serveur.
   reboot:
     msg: "Redémarrage automatique du serveur par ansible."
+    connect_timeout: 5
     reboot_timeout: 300
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: uptime
 
 - name: Installation des dépôts debian 11
   template:
