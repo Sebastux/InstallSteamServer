@@ -22,6 +22,10 @@ monit: # Installation et configuration de monit.
 				chmod 700 scripts/monit.sh
 				scripts/monit.sh
 
+config_vm: # Configuration de la machine.
+				chmod 700 scripts/configuration.sh
+				scripts/configuration.sh
+
 # ******** Outils divers ********
 init: # Installer les outils afin de déployer la configuration de la machine.
 				chmod 700 scripts/outils/init.sh

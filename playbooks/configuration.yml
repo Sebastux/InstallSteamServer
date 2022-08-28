@@ -1,0 +1,6 @@
+---
+- name: Configuration de la machine.
+  hosts: serveur
+  gather_facts: yes
+  roles:
+    - configuration
