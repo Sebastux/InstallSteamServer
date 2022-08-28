@@ -1,0 +1,132 @@
+---
+- name: Installation des dépôts debian.
+  template:
+    src: templates/sourcelist.j2
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ajout de dépots tiers.
+  template:
+    src: "templates/{{ item. source }}"
+    dest: "/etc/apt/sources.list.d/{{ item. destination }}"
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+  with_items:
+    - { source: 'backports.j2', destination: 'backports.list' }
+    - { source: 'proposedupdate.j2', destination: 'proposedupdate.list' }
+
+- name: Ajout de la résolution du nom du serveur.
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ ansible_default_ipv4.address }}  {{ fqdn_machine | lower }} {{ nom | lower }}"
+    insertafter: 'EOF'
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+
+- name: Configuration de la timezone.
+  timezone:
+    name: Europe/Paris
+
+- name: Copie du script de config de la machine.
+  template:
+    src: templates/configmachine.j2
+    dest: /root/configmachine.sh
+    backup: no
+    owner: root
+    group: root
+    mode: 0700
+
+- name: Execution du script de config.
+  shell: ./configmachine.sh
+  args:
+    chdir: /root/
+    executable: /bin/bash
+  register: var_config
+  failed_when: var_config.rc != 0
+  changed_when: var_config.rc == 0
+
+- name: Suppression du script de config.
+  file:
+    path: /root/configmachine.sh
+    state: absent
+
+- name: Configuration du ssh.
+  template:
+    src: "templates/{{ item.fichier }}"
+    dest: "{{ item.chemin }}"
+    backup: "{{ item.sauve }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { fichier: 'sshd_config_orig.j2', chemin: '/etc/ssh/sshd_config', sauve: 'no' }
+    - { fichier: 'sshd_config_modif.j2', chemin: '/etc/ssh/sshd_config.d/sshd_ansible.conf', sauve: 'no' }
+
+- name: Ouverture d'un port pour le service ssh.
+  firewalld:
+    service: ssh
+    permanent: yes
+    state: enabled
+    immediate: yes
+
+- name: Création des répertoires pour les alias.
+  file:
+    path: "{{ item.chemin }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+    state: directory
+  with_items:
+    - { chemin: '/root/.alias', mode: '0644' }
+    - { chemin: '/etc/skel/.alias', mode: '0755' }
+
+- name: Copie des templates d'alias.
+  template:
+    src: "templates/{{ item.fichier }}"
+    dest: "{{ item.chemin }}"
+    backup: "{{ item.sauve }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { fichier: 'alias_utilisateur.j2', chemin: '/etc/skel/.alias/alias.txt', sauve: 'no' }
+    - { fichier: 'alias_root.j2', chemin: '/root/.alias/alias.txt', sauve: 'no' }
+
+- name: Ajout d'une référence dans le fichier bashrc.
+  lineinfile:
+    path: "{{ item }}/.bashrc"
+    line: 'source ~/.alias/alias.txt'
+    owner: root
+    group: root
+    mode: 0644
+    insertafter: EOF
+    state: present
+    backup: no
+  with_items:
+    - /etc/skel
+    - /root
+
+#- name: Copie de la banniére.
+#  copy:
+#    src: files/motd.txt
+#    dest: /etc/motd.d/motd
+#    owner: root
+#    group: root
+#    mode: 0644
+#    backup: no
+
+- name: Suppression de l'ancienne clé SSH sur la machine locale.
+  shell: 'sed -i "/{{ ansible_default_ipv4.address }}/d" $HOME/.ssh/known_hosts'
+  args:
+    executable: /bin/bash
+  delegate_to: localhost
+  register: var_sshkey
+  failed_when: var_sshkey.rc != 0
+  changed_when: var_sshkey.rc == 0

@@ -1,0 +1,9 @@
+---
+liste_install: [ 'aptitude', 'neofetch' ]
+
+ssh_port: 22
+
+nom: "{{ nom_machine | default('default','debian11') }}"
+domaine: "{{ domaine_machine | default('default','localhost.localdomain') }}"
+
+fqdn_machine: "{{ nom }}.{{ domaine }}"
