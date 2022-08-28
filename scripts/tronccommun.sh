@@ -19,7 +19,7 @@ clear
 source .venv/bin/activate
 
 # Lancement de l'installation complete du master.
-ansible-playbook playbooks/tronccommun.yml -i staging
+ansible-playbook playbooks/tronccommun.yml -i production
 
 # Sortie de l'environnement virtuel
 deactivate
