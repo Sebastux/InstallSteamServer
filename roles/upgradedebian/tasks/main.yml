@@ -7,7 +7,7 @@
     group: root
     mode: '0644'
 
-- name: Installation des packages necessaire à la migration.
+- name: Installation des packages nécessaire à la migration.
   apt:
     name: "{{ liste_packages_migration }}"
     state: latest
