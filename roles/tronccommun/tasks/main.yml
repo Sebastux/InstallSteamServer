@@ -69,11 +69,6 @@
     path: /etc/motd.d/cockpit
     state: absent
 
-- name: Suppression de la mise à jour du motd.
-  file:
-    path: /etc/update-motd.d/10-uname
-    state: absent
-
 - name: Vérification du démarrage de cockpit.
   systemd:
     name: cockpit
@@ -96,6 +91,7 @@
   with_items:
     - http
     - https
+    - ssh
 
 - name: Redémarrage du serveur.
   reboot:
