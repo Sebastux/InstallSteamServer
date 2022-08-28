@@ -209,6 +209,9 @@
     chdir: "/root/travail/monit-{{ version_monit }}"
   args:
     executable: /bin/bash
+  register: var_compil
+  failed_when: var_compil.rc != 0
+  changed_when: var_compil.rc == 0
 
 - name: Suppression du répertoire de travail.
   file:
