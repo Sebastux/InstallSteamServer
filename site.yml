@@ -6,6 +6,7 @@
   gather_facts: yes
   roles:
     - upgradedebian
+    - configuration
     - tronccommun
     - durcissement
     - monit
