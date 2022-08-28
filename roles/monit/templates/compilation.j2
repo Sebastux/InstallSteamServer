@@ -1,3 +1,5 @@
+# shellcheck disable=SC1009,SC1054,SC1056,SC1072,SC1072,SC1073,SC1083
+
 {{ ansible_managed | comment }}
 
 #!/bin/bash
@@ -8,7 +10,7 @@
 # Description      : Script de compilation de monit.
 # Auteur           : Sebastux
 # Date             : 27/08/2022
-# Modification     : 27/08/2022
+# Modification     : 28/08/2022
 # Version          : 1.00
 # Utilisation      : ./compilation.sh
 # Notes            : Script lancé par ansible.
@@ -19,7 +21,7 @@ clear
 
 # Modification des droits du script de configuration.
 chmod 700 ./configure
- 
+
 # Configuration de la compilation.
 ./configure --prefix=/usr/ --without-ipv6 --enable-optimized --without-ssl
 
