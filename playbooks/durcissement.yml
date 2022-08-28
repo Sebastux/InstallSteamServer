@@ -1,7 +1,6 @@
 ---
 - name: Durcissement de l'O.S..
   hosts: serveur
-  remote_user: root
   gather_facts: yes
   roles:
     - durcissement

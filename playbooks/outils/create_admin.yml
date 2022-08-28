@@ -1,7 +1,6 @@
 ---
 - name: Création d'un utillisateur.
   hosts: serveur
-  remote_user: root
   gather_facts: yes
   vars_prompt:
 
