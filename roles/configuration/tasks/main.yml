@@ -19,6 +19,12 @@
     - { source: 'backports.j2', destination: 'backports.list' }
     - { source: 'proposedupdate.j2', destination: 'proposedupdate.list' }
 
+- name: Installation des packages du rôle.
+  apt:
+    name: "{{ liste_install }}"
+    state: latest
+    update_cache: yes
+
 - name: Ajout de la résolution du nom du serveur.
   lineinfile:
     path: /etc/hosts
@@ -61,20 +67,13 @@
   template:
     src: "templates/{{ item.fichier }}"
     dest: "{{ item.chemin }}"
-    backup: "{{ item.sauve }}"
+    backup: no
     owner: root
     group: root
     mode: 0644
   with_items:
-    - { fichier: 'sshd_config_orig.j2', chemin: '/etc/ssh/sshd_config', sauve: 'no' }
-    - { fichier: 'sshd_config_modif.j2', chemin: '/etc/ssh/sshd_config.d/sshd_ansible.conf', sauve: 'no' }
-
-- name: Ouverture d'un port pour le service ssh.
-  firewalld:
-    service: ssh
-    permanent: yes
-    state: enabled
-    immediate: yes
+    - { fichier: 'sshd_config_debian.j2', chemin: '/etc/ssh/sshd_config' }
+    - { fichier: 'sshd_config_modif.j2', chemin: '/etc/ssh/sshd_config.d/sshd_ansible.conf' }
 
 - name: Création des répertoires pour les alias.
   file:
@@ -84,20 +83,32 @@
     mode: "{{ item.mode }}"
     state: directory
   with_items:
-    - { chemin: '/root/.alias', mode: '0644' }
+    - { chemin: '/root/.alias', mode: '0755' }
     - { chemin: '/etc/skel/.alias', mode: '0755' }
 
 - name: Copie des templates d'alias.
   template:
     src: "templates/{{ item.fichier }}"
     dest: "{{ item.chemin }}"
-    backup: "{{ item.sauve }}"
+    backup: no
     owner: root
     group: root
     mode: 0644
   with_items:
-    - { fichier: 'alias_utilisateur.j2', chemin: '/etc/skel/.alias/alias.txt', sauve: 'no' }
-    - { fichier: 'alias_root.j2', chemin: '/root/.alias/alias.txt', sauve: 'no' }
+    - { fichier: 'alias_utilisateur.j2', chemin: '/etc/skel/.alias/alias.txt' }
+    - { fichier: 'alias_root.j2', chemin: '/root/.alias/alias.txt' }
+
+- name: Copie de la banniére.
+  copy:
+    src: files/baniere.txt
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+  with_items:
+    - '/etc/skel/.alias/banniere.txt'
+    - '/root/.alias/banniere.txt'
 
 - name: Ajout d'une référence dans le fichier bashrc.
   lineinfile:
@@ -113,14 +124,10 @@
     - /etc/skel
     - /root
 
-#- name: Copie de la banniére.
-#  copy:
-#    src: files/motd.txt
-#    dest: /etc/motd.d/motd
-#    owner: root
-#    group: root
-#    mode: 0644
-#    backup: no
+- name: Suppression de la mise à jour du motd.
+  file:
+    path: /etc/update-motd.d/10-uname
+    state: absent
 
 - name: Suppression de l'ancienne clé SSH sur la machine locale.
   shell: 'sed -i "/{{ ansible_default_ipv4.address }}/d" $HOME/.ssh/known_hosts'
