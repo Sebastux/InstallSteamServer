@@ -5,7 +5,6 @@
   remote_user: root
   gather_facts: yes
   roles:
-    - upgradedebian
     - configuration
     - tronccommun
     - durcissement
