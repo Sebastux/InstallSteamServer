@@ -49,11 +49,14 @@
 - name: Installation du fichier de configuration de monit.
   template:
     src: templates/monitrc.j2
-    dest: /etc/monit/monitrc
+    dest: "{{ item }}"
     owner: root
     group: root
     mode: 0600
     backup: no
+  with_items:
+    - /etc/monit/monitrc
+    - /etc/monitrc
 
 - name: Calcul du hash du fichier de configuration de monit.
   stat:
