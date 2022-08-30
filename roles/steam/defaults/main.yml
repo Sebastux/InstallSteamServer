@@ -1,2 +1,6 @@
 ---
-# defaults file for steam
+liste_install: [ 'curl', 'wget', 'file', 'tar', 'bzip2', 'gzip', 'unzip',
+                 'bsdmainutils', 'util-linux', 'ca-certificates', 'binutils',
+                 'bc', 'jq', 'tmux', 'netcat', 'lib32gcc-s1', 'lib32stdc++6' ]
+
+password: "{{ steam_passwd | default('P@ssW0rD01') }}"
