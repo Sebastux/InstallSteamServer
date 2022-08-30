@@ -1,1 +1,66 @@
 ---
+- name: Activation des dépots i386.
+  shell:
+    cmd: dpkg --add-architecture i386
+  args:
+    executable: /bin/bash
+  register: var_architecture
+  failed_when: var_architecture.rc != 0
+  changed_when: var_architecture.rc == 0
+
+- name: Mise à jour du système.
+  apt:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: Installation des packages du role.
+  apt:
+    name: "{{ liste_install }}"
+    state: latest
+
+- name: Création du compte steam.
+  user:
+    name: steam
+    comment: "Compte du serveur Steam."
+    shell: /bin/bash
+    password: "{{ password }}"
+    create_home: yes
+    state: present
+
+- name: Suppression de l'ancienne clé SSH.
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "../../cles_ssh/steam"
+    - "../../cles_ssh/steam.pub"
+  delegate_to: localhost
+
+- name: Création d'une clé ssh pour le compte.
+  openssh_keypair:
+    path: "../../cles_ssh/steam"
+    backend: cryptography
+    comment: "Clé SSH générée par ansible."
+    mode: 0644
+    regenerate: always
+    state: present
+    type: ed25519
+  delegate_to: localhost
+
+- name: Installation de la clé sur le compte.
+  authorized_key:
+    user: steam
+    state: present
+    key: "{{ lookup('file', '../../cles_ssh/steam.pub') }}"
+    comment: "Clé SSH générée et installée par ansible."
+    exclusive: yes
+    manage_dir: yes
+
+- name: Téléchargement des fichiers du serveur.
+  get_url:
+    url: https://raw.githubusercontent.com/GameServerManagers/LinuxGSM/master/linuxgsm.sh
+    dest: /home/steam/linuxgsm.sh
+    owner: steam
+    group: steam
+    mode: 0700
