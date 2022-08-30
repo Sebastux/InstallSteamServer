@@ -24,6 +24,12 @@
     state: stopped
     enabled: yes
 
+- name: Arret du service apache.
+  systemd:
+    name: apache2
+    state: stopped
+    enabled: yes
+
 - name: Vérification de l'exécution du pare-feu.
   systemd:
     name: firewalld
