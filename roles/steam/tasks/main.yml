@@ -1,12 +1,4 @@
 ---
-- name: Installation des dépôts debian 11
-  template:
-    src: templates/sourcelist.j2
-    dest: /etc/apt/sources.list
-    owner: root
-    group: root
-    mode: 0644
-
 - name: Activation des dépots i386.
   shell:
     cmd: dpkg --add-architecture i386
@@ -32,26 +24,26 @@
     name: steam
     comment: "Compte du serveur Steam."
     shell: /bin/bash
-    password: "{{ password | password_hash('sha512', 'SebAsTuX') }}"
+    password: "{{ password }}"
     create_home: yes
     state: present
-    update_password: always
 
 - name: Suppression de l'ancienne clé SSH.
   file:
     path: "{{ item }}"
     state: absent
   with_items:
-    - "../cles_ssh/steam"
-    - "../cles_ssh/steam.pub"
+    - "../../cles_ssh/steam"
+    - "../../cles_ssh/steam.pub"
   delegate_to: localhost
 
 - name: Création d'une clé ssh pour le compte.
   openssh_keypair:
-    path: "../cles_ssh/steam"
+    path: "../../cles_ssh/steam"
     backend: cryptography
     comment: "Clé SSH générée par ansible."
-    mode: 0600
+    mode: 0644
+    regenerate: always
     state: present
     type: ed25519
   delegate_to: localhost
@@ -60,7 +52,7 @@
   authorized_key:
     user: steam
     state: present
-    key: "{{ lookup('file', '../cles_ssh/steam.pub') }}"
+    key: "{{ lookup('file', '../../cles_ssh/steam.pub') }}"
     comment: "Clé SSH générée et installée par ansible."
     exclusive: yes
     manage_dir: yes
@@ -72,22 +64,3 @@
     owner: steam
     group: steam
     mode: 0700
-
-- name: Installation du script de lancement.
-  copy:
-    src: files/installation.sh
-    dest: /home/steam/installation.sh
-    owner: steam
-    group: steam
-    mode: 0700
-
-- name: Ouverture des ports pour le serveur Satisfactory.
-  firewalld:
-    port: "{{ item }}"
-    permanent: yes
-    state: enabled
-    immediate: yes
-  with_items:
-    - 7777/udp
-    - 15000/udp
-    - 15777/udp
