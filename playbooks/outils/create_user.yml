@@ -36,7 +36,7 @@
         path: "../../cles_ssh/{{ login }}"
         backend: cryptography
         comment: "Clé SSH générée par ansible."
-        mode: 0644
+        mode: 0600
         regenerate: always
         state: present
         type: ed25519
