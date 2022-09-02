@@ -1,0 +1,6 @@
+---
+- name: Création du compte Steam.
+  hosts: serveur
+  gather_facts: yes
+  roles:
+    - name: steam
