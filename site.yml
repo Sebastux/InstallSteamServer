@@ -1,5 +1,4 @@
 ---
-# Lancement de la tache d'installation complete du serveur.
 - name: Installation et configuration de la machine.
   hosts: serveur
   remote_user: root
@@ -9,3 +8,4 @@
     - tronccommun
     - durcissement
     - monit
+    - steam
