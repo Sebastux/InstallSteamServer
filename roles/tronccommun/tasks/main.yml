@@ -1,4 +1,12 @@
 ---
+- name: Installation des dépôts debian 11
+  template:
+    src: templates/sourcelist.j2
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: 0644
+    
 - name: Mise à jour de la VM.
   apt:
     name: "*"
