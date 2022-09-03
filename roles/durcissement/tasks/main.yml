@@ -31,7 +31,7 @@
 
 - name: Création d'une clé ssh pour le compte.
   openssh_keypair:
-    path: "cles_ssh/root"
+    path: "../cles_ssh/root"
     backend: cryptography
     comment: "Clé SSH généré par ansible."
     mode: 0644
@@ -44,7 +44,7 @@
   authorized_key:
     user: root
     state: present
-    key: "{{ lookup('file', 'cles_ssh/root.pub') }}"
+    key: "{{ lookup('file', '../cles_ssh/root.pub') }}"
     comment: "Clé SSH généré et installé par ansible."
     exclusive: yes
     manage_dir: yes
