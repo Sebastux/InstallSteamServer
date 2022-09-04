@@ -12,8 +12,6 @@ ansible_become_method=sudo
 # et mettre le mot de passe root.
 ansible_become_password="Mot de passe du compte de connexion."
 
-# ansible_remote_user=root
-
 # Variables changement du FQDN de la machine.
 nom_machine=""
 domaine_machine=""
@@ -29,9 +27,13 @@ user_monit="" # Nom du compte utilisateur de monit.
 user_passwd="" # Mot de passe du compte utilisateur de monit.
 port_monit="" # Port d'écoute de monit pour l'interface web. Attention à ne pas utiliser un port réservé
 
+# Variables SSH
+newsshport=22
+
 
 # Ne pas modifier
 ansible_ssh_private_key_file=../cles_ssh/root
 ansible_python_interpreter=/usr/bin/python3
 ansible_become_user=root
 activate_ssl=false
+ansible_remote_user=root
