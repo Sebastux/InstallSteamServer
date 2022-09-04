@@ -89,7 +89,6 @@
   with_items:
     - http
     - https
-    - ssh
 
 - name: Redémarrage du serveur.
   reboot:
