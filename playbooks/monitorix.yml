@@ -1,0 +1,6 @@
+---
+- name: Installation de monitorix.
+  hosts: serveur
+  gather_facts: yes
+  roles:
+    - monitorix

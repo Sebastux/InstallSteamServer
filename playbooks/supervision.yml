@@ -1,6 +1,7 @@
 ---
-- name: Installation de monit.
+- name: Installation de la supervision.
   hosts: serveur
   gather_facts: yes
   roles:
+    - monitorix
     - monit
