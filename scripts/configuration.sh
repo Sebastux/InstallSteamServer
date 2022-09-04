@@ -19,7 +19,7 @@ clear
 source .venv/bin/activate
 
 # Lancement de l'installation complete du master.
-ansible-playbook playbooks/configuration.yml -i production
+ansible-playbook playbooks/configuration.yml -i production --flush-cache
 
 # Sortie de l'environnement virtuel
 deactivate
