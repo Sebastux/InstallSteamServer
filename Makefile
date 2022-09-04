@@ -15,20 +15,22 @@ FSOUL   := $(shell tput -Txterm rmul)
 
 help: # Afficher l'aide.
 				@echo ''
-				@echo '${SOUL}${MAGENTA}Utilisation${FSOUL}${RESET} : '
+				@echo '${SOUL}${MAGENTA}Utilisation${FSOUL}${RESET} :'
 				@echo '${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
 				@echo ''
 				@echo '${GREEN}help${RESET} : Afficher l’aide.'
 				@echo ''
-				@echo '${SOUL}${MAGENTA}Installations${FSOUL}${RESET} : '
+				@echo '${SOUL}${MAGENTA}Installations${FSOUL}${RESET} :'
 				@echo '${GREEN}config_vm${RESET}     : Configuration de la machine.'
 				@echo '${GREEN}durcissement${RESET}  : Augmentation de la sécurité du système.'
 				@echo '${GREEN}init${RESET}          : Installer les outils afin de déployer la configuration de la machine.'
 				@echo '${GREEN}install${RESET}       : Installation complète du serveur Debian 11.'
 				@echo '${GREEN}monit${RESET}         : Installation et configuration de monit.'
+				@echo '${GREEN}monitorix${RESET}     : Installation et configuration de monitorix.'
+				@echo '${GREEN}supervision${RESET}   : Installation et configuration de monitorix et de monit.'
 				@echo '${GREEN}tronccommun${RESET}   : Installation du tronc commun et configuration de la machine.'
 				@echo ''
-				@echo '${SOUL}${MAGENTA}Outils${FSOUL}${RESET} : '
+				@echo '${SOUL}${MAGENTA}Outils${FSOUL}${RESET} :'
 				@echo '${GREEN}delete_user${RESET}   : Supprimer un compte ainsi que son répertoire de connexion.'
 				@echo '${GREEN}passwd${RESET}        : Mettre à jour le  mot de passe d’un compte.'
 				@echo '${GREEN}ssh_key${RESET}       : Mettre à jour la clé ssh d’un compte.'
@@ -54,6 +56,14 @@ durcissement: ## Augmentation de la sécurité du système.
 monit: ## Installation et configuration de monit.
 				chmod 700 scripts/monit.sh
 				scripts/monit.sh
+
+monitorix: ## Installation et configuration de monitorix.
+				chmod 700 scripts/monitorix.sh
+				scripts/monitorix.sh
+
+supervision: ## Installation et configuration de monitorix.
+				chmod 700 scripts/supervision.sh
+				scripts/supervision.sh
 
 config_vm: ## Configuration de la machine.
 				chmod 700 scripts/configuration.sh
