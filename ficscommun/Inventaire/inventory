@@ -28,7 +28,8 @@ user_passwd="" # Mot de passe du compte utilisateur de monit.
 port_monit="" # Port d'écoute de monit pour l'interface web. Attention à ne pas utiliser un port réservé
 
 # Variables SSH
-newsshport=22
+new_ssh_port=22
+use_ssh_key=false
 
 
 # Ne pas modifier
