@@ -2,7 +2,7 @@
 
 [sshd]
 enabled = true
-port = {{ ssh_port }}
+port = {{ new_ssh_port | default('22') }}
 #action = firewallcmd-ipset
 logpath = %(sshd_log)s
 maxretry = 3

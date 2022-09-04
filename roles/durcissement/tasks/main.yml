@@ -72,7 +72,7 @@
     - https
     - cockpit
 
-- name: Configuration du ssh.
+- name: Installation du fichier de configuration du ssh.
   template:
     src: templates/sshd_config_modif.j2
     dest: /etc/ssh/sshd_config.d/sshd_ansible.conf
@@ -85,20 +85,15 @@
   firewalld:
     service: ssh
     permanent: yes
-    state: absent
+    state: disabled
     immediate: no
 
 - name: Ouverture du nouveau port SSH.
   firewalld:
-    port: "{{ newsshport }}/tcp"
+    port: "{{ new_ssh_port }}/tcp"
     permanent: yes
     state: enabled
     immediate: no
-
-- name: Suppression du motd cockpit.
-  file:
-    path: /etc/motd.d/cockpit
-    state: absent
 
 - name: Suppression de la mise à jour du motd.
   file:
@@ -108,6 +103,12 @@
     - /etc/update-motd.d/10-uname
     - /etc/issue.d/cockpit.issue
     - /etc/motd.d/cockpit
+
+- name: Ajout d’adresse IP en liste blanche du pare feu.
+  firewalld:
+    source: "{{ ip_whitelist }}"
+    state: enabled
+    permanent: yes
 
 - name: Redémarrage du serveur.
   reboot:
@@ -121,4 +122,4 @@
 
 - name: Mise à jour du port SSH.
   set_fact:
-     ansible_port: "{{ newsshport }}"
+     ansible_port: "{{ new_ssh_port }}"

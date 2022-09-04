@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 
 # Configuration du port d'écoute
-Port {{ newsshport | default('22') }}
+Port {{ new_ssh_port | default('22') }}
 
 # Gestion réseau
 GatewayPorts no
@@ -14,7 +14,6 @@ PermitTunnel no
 Protocol 2
 
 # Type de clé ssh à utiliser
-
 HostKey /etc/ssh/ssh_host_ecdsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
 
@@ -22,15 +21,35 @@ HostKey /etc/ssh/ssh_host_ed25519_key
 LogLevel INFO
 
 # Gestion de la connexion en root
+{% if not use_ssh_key %}
+  # Utilisation du mot de passe.
 PermitRootLogin yes
+{% elif use_ssh_key %}
+  # Utilisation de la clé.
+PermitRootLogin prohibit-password
+{% else %}
+  # Mode par défaut (mot de passe).
+PermitRootLogin yes
+{% endif %}
 
 # Nombre de tentative et de session
 MaxAuthTries 3
 MaxSessions 2
 
 # Gestion de la connexion par mot de passe
+{% if not use_ssh_key %}
+  # Utilisation du mot de passe.
 PasswordAuthentication yes
 PermitEmptyPasswords no
+{% elif use_ssh_key %}
+  # Utilisation de la clé.
+PasswordAuthentication no
+PermitEmptyPasswords no
+{% else %}
+  # Mode par défaut (mot de passe).
+PasswordAuthentication yes
+PermitEmptyPasswords no
+{% endif %}
 
 # Utilisation de PAM pour la gestion des comptes.
 UsePAM yes
