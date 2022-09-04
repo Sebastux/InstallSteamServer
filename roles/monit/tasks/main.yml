@@ -7,24 +7,24 @@
     group: root
     mode: 0755
 
-- name: "Mise à jour du système."
+- name: Mise à jour du système.
   apt:
     name: "*"
     state: latest
     update_cache: yes
 
-- name: Installation des packages du role.
+- name: Installation des packages du rôle.
   apt:
     name: "{{ liste_install }}"
     state: latest
 
-- name: Arret du service monit.
+- name: Arrêt du service monit.
   systemd:
     name: monit
     state: stopped
     enabled: yes
 
-- name: Arret du service apache.
+- name: Arrêt du service apache.
   systemd:
     name: apache2
     state: stopped
@@ -43,7 +43,7 @@
     state: enabled
     immediate: yes
 
-- name: Création du répertoire de stockage des profiles.
+- name: Création du répertoire de stockage des profils.
   file:
     path: /etc/monit.d
     owner: root
@@ -115,7 +115,7 @@
     get_checksum: yes
   register: sshdconf_defaut
 
-- name: Installation du profile du service et du fichier de conf sshd par défaut.
+- name: Installation du profil du service et du fichier de conf sshd par défaut.
   template:
     src: "templates/{{ item.source }}"
     dest: "/etc/monit.d/{{ item.destination }}"
@@ -153,7 +153,7 @@
     get_checksum: yes
   register: chronyd
 
-- name: Installation du profile du service et du fichier de conf chrony.
+- name: Installation du profil du service et du fichier de conf chrony.
   template:
     src: "templates/{{ item.source }}"
     dest: "/etc/monit.d/{{ item.destination }}"
@@ -194,7 +194,7 @@
     group: root
     mode: 0644
 
-- name: Déconpression de l’archive.
+- name: Décompression de l’archive.
   unarchive:
     src: "/root/travail/monit-{{ version_monit }}.tar.gz"
     dest: /root/travail
@@ -227,7 +227,7 @@
     path: /root/travail
     state: absent
 
-- name: Démarage du service monit.
+- name: Démarrage du service monit.
   systemd:
     name: monit
     state: started
