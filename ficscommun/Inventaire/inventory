@@ -31,6 +31,9 @@ port_monit="" # Port d'écoute de monit pour l'interface web. Attention à ne pa
 new_ssh_port=22
 use_ssh_key=false
 
+# Variables firewalld et fail2ban
+ip_whitelist=1.2.3.4 6.7.8.9
+
 
 # Ne pas modifier
 ansible_ssh_private_key_file=../cles_ssh/root
