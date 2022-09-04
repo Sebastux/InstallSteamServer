@@ -63,18 +63,6 @@
     path: /root/configmachine.sh
     state: absent
 
-- name: Configuration du ssh.
-  template:
-    src: "templates/{{ item.fichier }}"
-    dest: "{{ item.chemin }}"
-    backup: no
-    owner: root
-    group: root
-    mode: 0644
-  with_items:
-    - { fichier: 'sshd_config_debian.j2', chemin: '/etc/ssh/sshd_config' }
-    - { fichier: 'sshd_config_modif.j2', chemin: '/etc/ssh/sshd_config.d/sshd_ansible.conf' }
-
 - name: Création des répertoires pour les alias.
   file:
     path: "{{ item.chemin }}"
@@ -123,11 +111,6 @@
   with_items:
     - /etc/skel
     - /root
-
-- name: Suppression de la mise à jour du motd.
-  file:
-    path: /etc/update-motd.d/10-uname
-    state: absent
 
 - name: Suppression de l'ancienne clé SSH sur la machine locale.
   shell: 'sed -i "/{{ ansible_default_ipv4.address }}/d" $HOME/.ssh/known_hosts'

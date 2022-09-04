@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 
 # Configuration du port d'écoute
-Port {{ ssh_port }}
+Port {{ newsshport | default('22') }}
 
 # Gestion réseau
 GatewayPorts no
