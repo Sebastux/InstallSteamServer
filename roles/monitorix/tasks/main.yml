@@ -1,2 +1,39 @@
 ---
-# tasks file for roles/monitorix
+- name: Mise à jour du système.
+  apt:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: Installation des packages du rôle.
+  apt:
+    name: "{{ liste_install }}"
+    state: latest
+
+- name: Arrêt du service monitorix.
+  systemd:
+    name: monitorix
+    state: stopped
+    enabled: no
+
+- name: Installation du fichier de configuration de monitorix.
+  template:
+    src: templates/monitorixconf.j2
+    dest: /etc/monitorix/monitorix.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+
+- name: Ajout d'une règle dans le pare-feu.
+  firewalld:
+    port: "{{ port_monitorix }}/tcp"
+    permanent: True
+    state: enabled
+    immediate: yes
+
+- name: Démarrage du service monitorix.
+  systemd:
+    name: monitorix
+    state: started
+    enabled: yes
