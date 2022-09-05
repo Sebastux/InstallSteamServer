@@ -175,6 +175,25 @@
     get_checksum: yes
   register: jail
 
+- name: Calcul du hash de monitorix.conf.
+  stat:
+    path: /etc/monitorix/monitorix.conf
+    checksum_algorithm: sha1
+    get_checksum: yes
+  register: monitorix
+
+- name: Copie des templates de monitorix.
+  template:
+    src: "templates/{{ item.source }}"
+    dest: "/etc/{{ item.destination }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+    backup: no
+  with_items:
+    - {source: 'monitorix.j2' , destination: 'monit.d/monitorix.conf',mode: '0644' }
+    - {source: 'smonitorixconf.j2' , destination: 'monit.d/monitorixconf.conf',mode: '0644' }
+
 - name: Installation profil du fichier de fail2ban.
   template:
     src: templates/jailconf.j2
@@ -226,6 +245,12 @@
   file:
     path: /root/travail
     state: absent
+
+- name: Arret du service apparmor.
+  systemd:
+    name: apparmor
+    state: stopped
+    enabled: no
 
 - name: Démarrage du service monit.
   systemd:
