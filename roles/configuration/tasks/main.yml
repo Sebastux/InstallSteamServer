@@ -17,7 +17,7 @@
     backup: no
   with_items:
     - { source: 'backports.j2', destination: 'backports.list' }
-    - { source: 'proposedupdate.j2', destination: 'proposedupdate.list' }
+    #- { source: 'proposedupdate.j2', destination: 'proposedupdate.list' }
 
 - name: Installation des packages du rôle.
   apt:
