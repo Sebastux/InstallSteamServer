@@ -33,6 +33,7 @@ help: # Afficher l'aide.
 				@echo '${SOUL}${MAGENTA}Outils${FSOUL}${RESET} :'
 				@echo '${GREEN}delete_user${RESET}   : Supprimer un compte ainsi que son répertoire de connexion.'
 				@echo '${GREEN}passwd${RESET}        : Mettre à jour le  mot de passe d’un compte.'
+				@echo '${GREEN}reboot${RESET}        : Redémarrer la machine virtuelle.'
 				@echo '${GREEN}ssh_key${RESET}       : Mettre à jour la clé ssh d’un compte.'
 				@echo '${GREEN}update${RESET}        : Mettre à jour les packages python et le dépôt de la machine ansible.'
 				@echo '${GREEN}upgrade${RESET}       : Migrer la VM debian 10 en debian 11'
@@ -97,6 +98,10 @@ delete_user: ## Supprimer un compte ainsi que son répertoire de connexion.
 passwd: ## Mettre à jour le  mot de passe d'un compte.
 				chmod 700 scripts/outils/passwd.sh
 				scripts/outils/passwd.sh
+
+reboot: ## Reboot de la VM.
+				chmod 700 scripts/outils/reboot.sh
+				scripts/outils/reboot.sh
 
 ssh_key: ## Mettre à jour la clé ssh d'un compte.
 				chmod 700 scripts/outils/ssh_key.sh
