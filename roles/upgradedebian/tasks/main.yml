@@ -1,4 +1,12 @@
 ---
+- name: Message Discord de début de role.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Démarrage de la migration du système."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Mise à jour du source.list par défaut.
   template:
     src: templates/sourcelisted10.j2
@@ -6,6 +14,14 @@
     owner: root
     group: root
     mode: '0644'
+
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Installation des packages nécessaire à la migration."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
 - name: Gestion d'erreur lors de l'installation des packages du role.
   block:
@@ -41,6 +57,14 @@
         name: "*"
         state: latest
 
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "ATTENTION !! Le serveur de jeux est en cours de redémarrage."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Redémarrage du serveur.
   reboot:
     msg: "Redémarrage automatique du serveur par ansible."
@@ -50,6 +74,21 @@
     post_reboot_delay: 30
     test_command: uptime
 
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    embeds:
+      - title: "Serveur redémarré avec succès.
+        description: |
+           "Le serveur a été redémarré avec succès.
+           "Tu peux reprendre une vie normale."
+           "Et moi, je continue la migration."
+        footer:
+          text: "Author: Ansible"
+        image:
+          avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Installation des dépôts debian 11
   template:
     src: templates/sourcelist.j2
@@ -57,6 +96,14 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Mise à jour vers la nouvelle version du système."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
 - name: Mise à jour vers debian 11.
   apt:
@@ -70,6 +117,14 @@
     autoremove: yes
     purge: yes
 
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "ATTENTION !! Le serveur de jeux est en cours de redémarrage. Ben oui pour la 2 ème fois"
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Redémarrage du serveur.
   reboot:
     msg: "Redémarrage automatique du serveur par ansible."
@@ -78,3 +133,18 @@
     pre_reboot_delay: 0
     post_reboot_delay: 30
     test_command: uptime
+
+- name: Message Discord de fin de role.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    embeds:
+      - title: "Serveur redémarré avec succès.
+        description: |
+           "Le serveur a été redémarré avec succès.
+           "Tu peux reprendre une vie normale."
+           "Et moi, je vais me coucher, je suis crevé."
+        footer:
+          text: "Author: Ansible"
+        image:
+          avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
