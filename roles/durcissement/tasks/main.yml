@@ -1,4 +1,12 @@
 ---
+- name: Message Discord de début de role.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Démarrage du durcissement du système."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Augmentation de la sécurité des mots de passe.
   lineinfile:
     path: /etc/pam.d/passwd
@@ -21,6 +29,14 @@
   with_items:
     - { regex: '^UMASK', ligne: 'UMASK           027' }
     - { regex: '^ENCRYPT_METHOD', ligne: 'ENCRYPT_METHOD SHA512' }
+
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Mise à jour du mot de passe root."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
 - name: Mise à jour du mot de passe root.
   user:
@@ -49,11 +65,27 @@
     exclusive: yes
     manage_dir: yes
 
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Installation des packages du rôle."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Installation des packages du rôle.
   apt:
     name: "{{ liste_install }}"
     state: latest
     update_cache: yes
+
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Démarrage du pare-feu et ouverture de port pour divers services."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
 - name: Démarrage du pare-feu.
   systemd:
@@ -123,3 +155,11 @@
 - name: Mise à jour du port SSH.
   set_fact:
      ansible_port: "{{ new_ssh_port }}"
+
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Le système est maintenant bien dur."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"

@@ -23,3 +23,16 @@
         password: "{{ password }}"
         state: present
         update_password: always
+
+    - name: Message Discord de fin de playbook.
+      community.general.discord:
+        webhook_id: "{{ id_webhook }}"
+        webhook_token: "{{ token_webhook }}"
+        embeds:
+          - title: "Compte {{ login }} modifié avec succés"
+            description: |
+               "Mot de passe : Non je déconne, t'auras pas le nouveau non plus. :D"
+            footer:
+              text: "Author: Ansible"
+            image:
+              avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"

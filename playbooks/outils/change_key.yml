@@ -9,6 +9,14 @@
       private: no
 
   tasks:
+    - name: Message Discord de début playbook.
+      community.general.discord:
+        webhook_id: "{{ id_webhook }}"
+        webhook_token: "{{ token_webhook }}"
+        content: "Renouvelement de la clé ssh du compte {{ login }}."
+        username: Ansible
+        avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
     - name: Suppression de l'ancienne clé SSH.
       file:
         path: "{{ item }}"
@@ -37,3 +45,11 @@
         comment: "Clé SSH générée et installée par ansible."
         exclusive: yes
         manage_dir: yes
+
+    - name: Message Discord de fin de playbook.
+      community.general.discord:
+        webhook_id: "{{ id_webhook }}"
+        webhook_token: "{{ token_webhook }}"
+        content: "Clé SSH installée avec succès sur le compte {{ login }}."
+        username: Ansible
+        avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"

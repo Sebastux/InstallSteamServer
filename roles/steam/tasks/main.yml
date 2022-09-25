@@ -1,4 +1,12 @@
 ---
+- name: Message Discord de début de role.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Démarrage de l'installation du serveur Steam."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Installation des dépôts debian 11
   template:
     src: templates/sourcelist.j2
@@ -16,11 +24,27 @@
   failed_when: var_architecture.rc != 0
   changed_when: var_architecture.rc == 0
 
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Mise à jour du système."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Mise à jour du système.
   apt:
     name: "*"
     state: latest
     update_cache: yes
+
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Installation des packages du role."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
 - name: Installation des packages du role.
   apt:
@@ -65,6 +89,14 @@
     exclusive: yes
     manage_dir: yes
 
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Téléchargement des fichiers du serveur."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Téléchargement des fichiers du serveur.
   get_url:
     url: https://raw.githubusercontent.com/GameServerManagers/LinuxGSM/master/linuxgsm.sh
@@ -91,3 +123,11 @@
     - 7777/udp
     - 15000/udp
     - 15777/udp
+
+- name: Message Discord de fin de rôle.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Stean a été installé avec succès."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
