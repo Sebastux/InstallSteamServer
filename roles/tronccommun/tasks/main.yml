@@ -36,21 +36,21 @@
     username: Ansible
     avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
-- name: Gestion d'erreur lors de l'installation des packages du role.
-  block:
-    - name: Installation des packages du rôle.
-      apt:
-        name: "{{ liste_install }}"
-        state: latest
-        update_cache: yes
-        dpkg_options: Dpkg::Options::="--force-overwrite" --fix-broken install
-  rescue:
-    - name: Installation des packages du rôle.
-      apt:
-        name: "{{ liste_install }}"
-        state: latest
-        update_cache: yes
-        dpkg_options: Dpkg::Options::="--force-overwrite" --fix-broken install
+#- name: Gestion d'erreur lors de l'installation des packages du role.
+#  block:
+#    - name: Installation des packages du rôle.
+#      apt:
+#        name: "{{ liste_install }}"
+#        state: latest
+#        update_cache: yes
+#
+#  rescue:
+#    - name: Installation des packages du rôle.
+#      apt:
+#        name: "{{ liste_install }}"
+#        state: latest
+#        update_cache: yes
+#        dpkg_options: Dpkg::Options::="--force-overwrite" --fix-broken install
 
 - name: Mise à jour des packages de bases python.
   pip:
