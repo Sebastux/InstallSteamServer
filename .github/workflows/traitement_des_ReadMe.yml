@@ -1,0 +1,185 @@
+name: Traitement des fichiers ReadMe
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  replace:
+    runs-on: ubuntu-latest
+    name: Création des fichiers ReadMe.
+    steps:
+      - name: Clonage du dépôt git.
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: "Création du ReadMe principal."
+        uses: Readme-Workflows/readme-replacer@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          TEMPLATE_FILE: './TEMPLATE.md'
+          COMMIT_FILE: './README.md'
+          CUSTOM_REPLACER_FILE: '.github/json/customReplacer.json'
+          COMMIT_MESSAGE: "Remplacement du readme principal."
+          TIMEZONE: Europe/Paris
+          COMMIT_EMAIL: "sebastux+github-actions[bot]@users.noreply.github.com"
+
+      - name: "Création du ReadMe configuration."
+        uses: Readme-Workflows/readme-replacer@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          TEMPLATE_FILE: 'roles/configuration/TEMPLATE.md'
+          COMMIT_FILE: 'roles/configuration/README.md'
+          CUSTOM_REPLACER_FILE: '.github/json/customReplacer.json'
+          COMMIT_MESSAGE: "Création du ReadMe configuration."
+          TIMEZONE: Europe/Paris
+          COMMIT_EMAIL: "sebastux+github-actions[bot]@users.noreply.github.com"
+
+      - name: "Création du ReadMe durcissement."
+        uses: Readme-Workflows/readme-replacer@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          TEMPLATE_FILE: 'roles/durcissement/TEMPLATE.md'
+          COMMIT_FILE: 'roles/durcissement/README.md'
+          CUSTOM_REPLACER_FILE: '.github/json/customReplacer.json'
+          COMMIT_MESSAGE: "Création du ReadMe durcissement."
+          TIMEZONE: Europe/Paris
+          COMMIT_EMAIL: "sebastux+github-actions[bot]@users.noreply.github.com"
+
+      - name: "Création du ReadMe de monit."
+        uses: Readme-Workflows/readme-replacer@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          TEMPLATE_FILE: 'roles/monit/TEMPLATE.md'
+          COMMIT_FILE: 'roles/monit/README.md'
+          CUSTOM_REPLACER_FILE: '.github/json/customReplacer.json'
+          COMMIT_MESSAGE: "Création du ReadMe monit."
+          TIMEZONE: Europe/Paris
+          COMMIT_EMAIL: "sebastux+github-actions[bot]@users.noreply.github.com"
+
+      - name: "Création du ReadMe de monitorix."
+        uses: Readme-Workflows/readme-replacer@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          TEMPLATE_FILE: 'roles/monitorix/TEMPLATE.md'
+          COMMIT_FILE: 'roles/monitorix/README.md'
+          CUSTOM_REPLACER_FILE: '.github/json/customReplacer.json'
+          COMMIT_MESSAGE: "Création du ReadMe monitorix."
+          TIMEZONE: Europe/Paris
+          COMMIT_EMAIL: "sebastux+github-actions[bot]@users.noreply.github.com"
+
+      - name: "Création du ReadMe de steam."
+        uses: Readme-Workflows/readme-replacer@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          TEMPLATE_FILE: 'roles/steam/TEMPLATE.md'
+          COMMIT_FILE: 'roles/steam/README.md'
+          CUSTOM_REPLACER_FILE: '.github/json/customReplacer.json'
+          COMMIT_MESSAGE: "Création du ReadMe de steam."
+          TIMEZONE: Europe/Paris
+          COMMIT_EMAIL: "sebastux+github-actions[bot]@users.noreply.github.com"
+
+      - name: "Création du ReadMe tronccommun."
+        uses: Readme-Workflows/readme-replacer@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          TEMPLATE_FILE: 'roles/tronccommun/TEMPLATE.md'
+          COMMIT_FILE: 'roles/tronccommun/README.md'
+          CUSTOM_REPLACER_FILE: '.github/json/customReplacer.json'
+          COMMIT_MESSAGE: "Création du ReadMe tronccommun."
+          TIMEZONE: Europe/Paris
+          COMMIT_EMAIL: "sebastux+github-actions[bot]@users.noreply.github.com"
+
+      - name: "Création du ReadMe upgradedebian."
+        uses: Readme-Workflows/readme-replacer@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          TEMPLATE_FILE: 'roles/upgradedebian/TEMPLATE.md'
+          COMMIT_FILE: 'roles/upgradedebian/README.md'
+          CUSTOM_REPLACER_FILE: '.github/json/customReplacer.json'
+          COMMIT_MESSAGE: "Création du ReadMe upgradedebian."
+          TIMEZONE: Europe/Paris
+          COMMIT_EMAIL: "sebastux+github-actions[bot]@users.noreply.github.com"
+
+  badges:
+    runs-on: ubuntu-latest
+    needs: replace
+    steps:
+      - name: Clonage du dépôt git.
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Insertion des badges dans le readme ppal.
+        uses: wow-actions/add-badges@v1.0.1
+        env:
+          repo_url: ${{ github.event.repository.html_url }}
+          repo_name: ${{ github.event.repository.name }}
+          repo_owner: ${{ github.event.repository.owner.login }}
+          path: './README.md'
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          center: true
+          commit_message: 'Ajout des badges dans le README principal'
+          committer_name: 'add-badges[bot]'
+          committer_email: 'add-badges@users.noreply.github.com'
+          badges: |
+            [
+              [
+                {
+                  "badge": "https://img.shields.io/github/license/Sebastux/DevCi?style=flat-square",
+                  "alt": "Unknown",
+                  "link": "https://github.com/Sebastux/DevCi/blob/master/LICENSE"
+                },
+                {
+                  "badge": "https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white",
+                  "alt": "Ansible",
+                  "link": "https://www.ansible.com/"
+                },
+                {
+                  "badge": "https://img.shields.io/badge/jinja-white.svg?style=for-the-badge&logo=jinja&logoColor=black",
+                  "alt": "Jinja2",
+                  "link": "https://jinja.palletsprojects.com/en/3.1.x/"
+                }
+              ],
+              [
+                {
+                  "badge": "https://img.shields.io/badge/Fedora-294172?style=for-the-badge&logo=fedora&logoColor=white",
+                  "alt": "Fedora",
+                  "link": "https://getfedora.org/fr/"
+                },
+                {
+                  "badge": "https://img.shields.io/badge/Debian-A81D33?style=for-the-badge&logo=debian&logoColor=white",
+                  "alt": "Debian",
+                  "link": "https://www.debian.org/index.fr.html"
+                }
+              ],
+              [
+                {
+                  "badge": "https://github.com/Sebastux/DevCi/actions/workflows/traitement_des_ReadMe.yml/badge.svg?branch=master&event=push",
+                  "alt": "ReadMe",
+                  "link": "${{ env.repo_url }}/actions/workflows/release.yml"
+                },
+                {
+                  "badge": "https://github.com/Sebastux/DevCi/actions/workflows/traitement_des_shell_scripts.yml/badge.svg?branch=master&event=push",
+                  "alt": "shell",
+                  "link": "${{ env.repo_url }}/actions/workflows/release.yml"
+                }
+              ],
+              [
+                {
+                  "badge": "https://github.com/Sebastux/DevCi/actions/workflows/traitement_des_playbooks.yml/badge.svg?branch=master&event=push",
+                  "alt": "yaml",
+                  "link": "${{ env.repo_url }}/actions/workflows/release.yml"
+                }
+              ]
+            ]
