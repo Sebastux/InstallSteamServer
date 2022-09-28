@@ -1,0 +1,24 @@
+name: Vérification des scripts shell.
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  preparation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mise à jour de l'environnement.
+        run: |
+          sudo apt-get update
+          sudo apt-get upgrade -y
+          sudo apt-get install shellcheck -y
+
+      - name: Clonage du dépôt git.
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Vérification des scripts d'installation.
+        run: |
+          for i in $(find scripts/ -name "*.sh" | xargs); do shellcheck --check-sourced --color=always --severity=error $i; done

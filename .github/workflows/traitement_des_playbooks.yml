@@ -1,0 +1,32 @@
+name: Vérification des playbooks / roles.
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  preparation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mise à jour de l'environnement.
+        run: |
+          sudo apt-get update
+          sudo apt-get upgrade -y
+
+      - name: Clonage du dépôt git.
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Installation de python 3
+        uses: actions/setup-python@v4.2.0
+        with:
+          python-version: '3.10'
+
+      - name: Exécution du linter yaml.
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade -r req_pip.txt
+          pip install -r req_verif.txt
+          ansible-lint
