@@ -1,5 +1,5 @@
 ---
-liste_install: [ 'aptitude', 'neofetch' ]
+liste_install: [ 'aptitude', 'neofetch', 'nala-legacy' ]
 
 ssh_port: 22
 
