@@ -1,4 +1,4 @@
-# {{ ansible_managed | comment }}
+{{ ansible_managed | comment }}
 
 # Alias divers
 unalias ll 2>/dev/null
@@ -6,6 +6,9 @@ alias ll='ls -lh --color=auto'
 
 # Alias grep
 alias grep='grep --color=auto'
+
+# Ajout du timestamp dans history
+HISTTIMEFORMAT="%d/%m/%y %T "
 
 # Affichage de la banniére
 clear
