@@ -61,6 +61,18 @@
     state: started
     enabled: yes
 
+- name: Démarrage de fail2ban.
+  systemd:
+    name: fail2ban
+    state: started
+    enabled: yes
+
+- name: Arret du service apache.
+  systemd:
+    name: apache2
+    state: stopped
+    enabled: no
+
 - name: Ouverture de port pour divers services.
   firewalld:
     service: "{{ item }}"
@@ -72,7 +84,16 @@
     - https
     - cockpit
 
-- name: Installation du fichier de configuration du ssh.
+- name: Installation du fichier de configuration du ssh original.
+  template:
+    src: templates/sshd_config_orig.j2
+    dest: /etc/ssh/sshd_config
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Installation du fichier de configuration du ssh modifié.
   template:
     src: templates/sshd_config_modif.j2
     dest: /etc/ssh/sshd_config.d/sshd_ansible.conf
@@ -110,6 +131,26 @@
     state: enabled
     permanent: yes
 
+- name: Désactivation du protocole dccp.
+  kernel_blacklist:
+    name: dccp
+    state: present
+
+- name: Désactivation du protocole sctp.
+  kernel_blacklist:
+    name: sctp
+    state: present
+
+- name: Désactivation du protocole rds.
+  kernel_blacklist:
+    name: rds
+    state: present
+
+- name: Désactivation du protocole tipc.
+  kernel_blacklist:
+    name: tipc
+    state: present
+  
 - name: Redémarrage du serveur.
   reboot:
     msg: "Redémarrage automatique du serveur par ansible."
