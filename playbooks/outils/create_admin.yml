@@ -22,6 +22,13 @@
       default: "Créé automatiquement par ansible."
 
   tasks:
+    - name: Message Discord de début playbook.
+      community.general.discord:
+        webhook_id: "{{ id_webhook }}"
+        webhook_token: "{{ token_webhook }}"
+        content: "Début de la création du compte {{ login }}."
+        username: Ansible
+        avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
     - name: "Création du compte sudoer : {{ login }}"
       user:
@@ -52,3 +59,18 @@
         comment: "Clé SSH générée et installée par ansible."
         exclusive: yes
         manage_dir: yes
+
+    - name: Message de Discord de dédut de création de compte.
+      community.general.discord:
+        webhook_id: "{{ id_webhook }}"
+        webhook_token: "{{ token_webhook }}"
+        embeds:
+          - title: "Compte {{ login }} créé avec succés"
+            description: |
+               "Type de compte : administrateur"
+               "Commentaire : {{ commentaire }}"
+               "Mot de passe : Non je déconne, te ne l'auras pas. :D"
+            footer:
+              text: "Author: Ansible"
+            image:
+              avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"

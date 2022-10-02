@@ -1,4 +1,12 @@
 ---
+- name: Message Discord de début de role.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Démarrage de la configuration du serveur."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Installation des dépôts debian.
   template:
     src: templates/sourcelist.j2
@@ -21,6 +29,15 @@
     - { source: 'backports.j2', destination: 'backports.list' }
     - { source: 'nala.j2', destination: 'nala.list' }
 
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Installation des packages."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
+
 - name: Installation de la clé nala.
   apt_key:
     url: https://deb.volian.org/volian/scar.key
@@ -31,6 +48,14 @@
     name: "{{ liste_install }}"
     state: latest
     update_cache: yes
+
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Installation des packages terminé."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
 - name: Configuration de la timezone.
   timezone:
@@ -127,3 +152,11 @@
   register: var_sshkey
   failed_when: var_sshkey.rc != 0
   changed_when: var_sshkey.rc == 0
+
+- name: Message Discord de fin de role.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Configuration du serveur terminé."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"

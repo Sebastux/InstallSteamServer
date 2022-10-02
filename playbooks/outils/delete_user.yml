@@ -9,6 +9,14 @@
       private: no
 
   tasks:
+    - name: Message Discord de début de playbook.
+      community.general.discord:
+        webhook_id: "{{ id_webhook }}"
+        webhook_token: "{{ token_webhook }}"
+        content: "Suppression du compte {{ login }}."
+        username: Ansible
+        avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
     - name: "Suppression du compte : {{ login }}"
       user:
         name: "{{ login }}"
@@ -23,3 +31,11 @@
         - "../../cles_ssh/{{ login }}"
         - "../../cles_ssh/{{ login }}.pub"
       delegate_to: localhost
+
+    - name: Message Discord de début de playbook.
+      community.general.discord:
+        webhook_id: "{{ id_webhook }}"
+        webhook_token: "{{ token_webhook }}"
+        content: "{{ login }} a disparu sans laisser d'adresse. Quelqu'un a son 06 ?"
+        username: Ansible
+        avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"

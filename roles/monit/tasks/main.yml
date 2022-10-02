@@ -1,4 +1,12 @@
 ---
+- name: Message Discord de début de role.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Démarrage de l'installation de monit."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Création du répertoire de travail.
   file:
     path: /root/travail
@@ -12,6 +20,14 @@
     name: "*"
     state: latest
     update_cache: yes
+
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Installation des packages du rôle."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
 - name: Installation des packages du rôle.
   apt:
@@ -63,6 +79,14 @@
   with_items:
     - /etc/monit/monitrc
     - /etc/monitrc
+
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Début du calcul des hash."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
 - name: Calcul du hash du fichier de configuration de monit.
   stat:
@@ -231,6 +255,14 @@
     mode: 0700
     backup: no
 
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Compilation et installation de la version {{ version_monit }} de monit."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: "Compilation et installation de la version {{ version_monit }} de monit."
   shell:
     cmd: ./compilation.sh
@@ -257,3 +289,11 @@
     name: monit
     state: started
     enabled: yes
+
+- name: Message Discord de fin de rôle.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "La version {{ version_monit }} de monit a été installée avec succès."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
