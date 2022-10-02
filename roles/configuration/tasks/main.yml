@@ -7,7 +7,7 @@
     group: root
     mode: 0644
 
-- name: Ajout de dépots tiers.
+- name: Ajout de dépôts tiers.
   template:
     src: "templates/{{ item. source }}"
     dest: "/etc/apt/sources.list.d/{{ item. destination }}"
@@ -19,23 +19,18 @@
     - { source: 'backports.j2', destination: 'backports.list' }
     - { source: 'proposedupdate.j2', destination: 'proposedupdate.list' }
     - { source: 'backports.j2', destination: 'backports.list' }
+    - { source: 'nala.j2', destination: 'nala.list' }
+
+- name: Installation de la clé nala.
+  apt_key:
+    url: https://deb.volian.org/volian/scar.key
+    state: present
 
 - name: Installation des packages du rôle.
   apt:
     name: "{{ liste_install }}"
     state: latest
     update_cache: yes
-
-- name: Ajout de la résolution du nom du serveur.
-  lineinfile:
-    path: /etc/hosts
-    line: "{{ ansible_default_ipv4.address }}  {{ fqdn_machine | lower }} {{ nom | lower }}"
-    insertafter: 'EOF'
-    state: present
-    owner: root
-    group: root
-    mode: 0644
-    backup: no
 
 - name: Configuration de la timezone.
   timezone:
@@ -63,6 +58,17 @@
   file:
     path: /root/configmachine.sh
     state: absent
+
+- name: Ajout de la résolution du nom du serveur.
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ ansible_default_ipv4.address }}  {{ fqdn_machine | lower }} {{ nom | lower }}"
+    insertafter: 'EOF'
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
 
 - name: Création des répertoires pour les alias.
   file:
