@@ -215,8 +215,8 @@
     mode: "{{ item.mode }}"
     backup: no
   with_items:
-    - {source: 'monitorix.j2' , destination: 'monit.d/monitorix.conf',mode: '0644' }
-    - {source: 'smonitorixconf.j2' , destination: 'monit.d/monitorixconf.conf',mode: '0644' }
+    - { source: 'monitorix.j2', destination: 'monit.d/monitorix.conf', mode: '0644' }
+    - { source: 'smonitorixconf.j2', destination: 'monit.d/monitorixconf.conf', mode: '0644' }
 
 - name: Installation profil du fichier de fail2ban.
   template:

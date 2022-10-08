@@ -182,7 +182,7 @@
   kernel_blacklist:
     name: tipc
     state: present
-  
+
 - name: Redémarrage du serveur.
   reboot:
     msg: "Redémarrage automatique du serveur par ansible."
@@ -195,7 +195,7 @@
 
 - name: Mise à jour du port SSH.
   set_fact:
-     ansible_port: "{{ new_ssh_port }}"
+    ansible_port: "{{ new_ssh_port }}"
 
 - name: Message Discord intermédiaire.
   community.general.discord:

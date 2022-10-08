@@ -1,7 +1,7 @@
 ---
 liste_install: [ 'monit', 'lm-sensors', 'sysstat', 'wget', 'rrdtool',
                  'firewalld', 'aptitude', 'iftop', 'iotop', 'itop',
-                 'htop', 'zlib1g-dev', 'libpam0g-dev','libssl-dev',
+                 'htop', 'zlib1g-dev', 'libpam0g-dev', 'libssl-dev',
                  'libtool', 'bison', 'flex', 'autoconf', 'build-essential',
                  'make' ]
 

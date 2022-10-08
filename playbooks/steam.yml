@@ -3,4 +3,4 @@
   hosts: serveur
   gather_facts: yes
   roles:
-    - name: steam
+    - steam

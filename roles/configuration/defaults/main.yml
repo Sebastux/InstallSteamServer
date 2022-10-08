@@ -5,6 +5,6 @@ ssh_port: 22
 
 # ,'debian11'
 nom: "{{ nom_machine | default('debian11') }}"
-domaine: "{{ domaine_machine | default('localhost.localdomain','localhost.localdomain') }}"
+domaine: "{{ domaine_machine | default('localhost.localdomain', 'localhost.localdomain') }}"
 
 fqdn_machine: "{{ nom }}.{{ domaine }}"

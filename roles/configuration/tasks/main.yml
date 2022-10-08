@@ -17,8 +17,8 @@
 
 - name: Ajout de dépôts tiers.
   template:
-    src: "templates/{{ item. source }}"
-    dest: "/etc/apt/sources.list.d/{{ item. destination }}"
+    src: "templates/{{ item.source }}"
+    dest: "/etc/apt/sources.list.d/{{ item.destination }}"
     owner: root
     group: root
     mode: 0644
