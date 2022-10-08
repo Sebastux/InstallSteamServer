@@ -10,8 +10,10 @@ extra_vars:
   cible: toto
 
 skip_list:
-  - 'fqcn-builtins'
   - 'package-latest'
+  - 'fqcn[action]'
+  - 'fqcn[action-core]'
+  - 'fqcn[action-redirect]'
 
 warn_list:
   - 'document-end'
@@ -19,5 +21,6 @@ warn_list:
   - 'ignore-errors'
   - 'command-instead-of-shell'
   - 'command-instead-of-module'
+  - 'name[template]'
 
 use_default_rules: true
