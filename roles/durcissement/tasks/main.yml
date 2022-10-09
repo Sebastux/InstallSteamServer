@@ -45,6 +45,14 @@
     password: "{{ new_passwd | password_hash('sha512', 'SebAsTuX') }}"
     update_password: always
 
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Retrait de la nouvelle clé chez le serrurier."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
 - name: Création d'une clé ssh pour le compte root.
   openssh_keypair:
     path: "../cles_ssh/root"
@@ -83,70 +91,81 @@
   community.general.discord:
     webhook_id: "{{ id_webhook }}"
     webhook_token: "{{ token_webhook }}"
-    content: "Démarrage du pare-feu et ouverture de port pour divers services."
+    content: "Démarrage du pare-feu et ouverture / fermeture de ports, Attention les doigts ça brule."
     username: Ansible
     avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
-- name: Démarrage du pare-feu.
-  systemd:
-    name: firewalld
-    state: started
-    enabled: yes
+- name: Gestion du pare feu.
+  block:
+    - name: Démarrage du pare-feu.
+      systemd:
+        name: firewalld
+        state: started
+        enabled: yes
 
-- name: Démarrage de fail2ban.
-  systemd:
-    name: fail2ban
-    state: started
-    enabled: yes
+    - name: Démarrage de fail2ban.
+      systemd:
+        name: fail2ban
+        state: started
+        enabled: yes
 
-- name: Arret du service apache.
-  systemd:
-    name: apache2
-    state: stopped
-    enabled: no
+    - name: Arret du service apache.
+      systemd:
+        name: apache2
+        state: stopped
+        enabled: no
 
-- name: Ouverture de port pour divers services.
-  firewalld:
-    service: "{{ item }}"
-    permanent: yes
-    immediate: yes
-    state: enabled
-  with_items:
-    - http
-    - https
-    - cockpit
+    - name: Ouverture du port cockpit.
+      firewalld:
+        service: cockpit
+        permanent: yes
+        immediate: yes
+        state: enabled
 
-- name: Installation du fichier de configuration du ssh original.
-  template:
-    src: templates/sshd_config_orig.j2
-    dest: /etc/ssh/sshd_config
-    backup: no
-    owner: root
-    group: root
-    mode: 0644
+    - name: Fermeture de ports inutile.
+      firewalld:
+        service: "{{ item }}"
+        permanent: yes
+        immediate: yes
+        state: disabled
+      with_items:
+        - http
+        - https
+        - ftp
 
-- name: Installation du fichier de configuration du ssh modifié.
-  template:
-    src: templates/sshd_config_modif.j2
-    dest: /etc/ssh/sshd_config.d/sshd_ansible.conf
-    backup: no
-    owner: root
-    group: root
-    mode: 0644
+- name: Gestion du SSH.
+  block:
+    - name: Installation du fichier de configuration du ssh original.
+      template:
+        src: templates/sshd_config_orig.j2
+        dest: /etc/ssh/sshd_config
+        backup: no
+        owner: root
+        group: root
+        mode: 0644
 
-- name: Suppression du port SSH par défaut.
-  firewalld:
-    service: ssh
-    permanent: yes
-    state: disabled
-    immediate: no
+    - name: Installation du fichier de configuration du ssh modifié.
+      template:
+        src: templates/sshd_config_modif.j2
+        dest: /etc/ssh/sshd_config.d/sshd_ansible.conf
+        backup: no
+        owner: root
+        group: root
+        mode: 0644
 
-- name: Ouverture du nouveau port SSH.
-  firewalld:
-    port: "{{ new_ssh_port }}/tcp"
-    permanent: yes
-    state: enabled
-    immediate: no
+    - name: Suppression du port SSH par défaut.
+      firewalld:
+        service: ssh
+        permanent: yes
+        state: disabled
+        immediate: no
+
+    - name: Ouverture du nouveau port SSH.
+      firewalld:
+        port: "{{ new_ssh_port }}/tcp"
+        permanent: yes
+        state: enabled
+        immediate: no
 
 - name: Suppression de la mise à jour du motd.
   file:
@@ -163,25 +182,112 @@
     state: enabled
     permanent: yes
 
-- name: Désactivation du protocole dccp.
-  kernel_blacklist:
-    name: dccp
-    state: present
+- name: Message Discord intermédiaire.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "Désactivation diverse et blaclistage en cours. T'inquiète t'es pas encore concerné :D ."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
-- name: Désactivation du protocole sctp.
-  kernel_blacklist:
-    name: sctp
-    state: present
+- name: Désactivation et blacklistage.
+  block:
+    - name: Désactivation du protocole dccp - blacklist.
+      kernel_blacklist:
+        name: dccp
+        state: present
 
-- name: Désactivation du protocole rds.
-  kernel_blacklist:
-    name: rds
-    state: present
+    - name: Désactivation du protocole dccp - modprobe.
+      lineinfile:
+        dest: /etc/modprobe.d/no-firewire.conf
+        line: "{{ item }}"
+        mode: '0644'
+        create: yes
 
-- name: Désactivation du protocole tipc.
-  kernel_blacklist:
-    name: tipc
-    state: present
+    - name: Désactivation du protocole sctp - blacklist.
+      kernel_blacklist:
+        name: sctp
+        state: present
+
+    - name: Désactivation du firewire - modprobe.
+      lineinfile:
+        dest: /etc/modprobe.d/no-firewire.conf
+        line: "{{ item }}"
+        mode: '0644'
+        create: yes
+
+    - name: Désactivation du protocole rds - blacklist.
+      kernel_blacklist:
+        name: rds
+        state: present
+
+    - name: Désactivation du firewire - modprobe.
+      lineinfile:
+        dest: /etc/modprobe.d/no-firewire.conf
+        line: "{{ item }}"
+        mode: '0644'
+        create: yes
+
+    - name: Désactivation du protocole tipc - blacklist.
+      kernel_blacklist:
+        name: tipc
+        state: present
+
+    - name: Désactivation du firewire - modprobe.
+      lineinfile:
+        dest: /etc/modprobe.d/no-firewire.conf
+        line: "{{ item }}"
+        mode: '0644'
+        create: yes
+
+    - name: Désactivation des ports USB - blacklist.
+      kernel_blacklist:
+        name: usb-storage
+        state: present
+
+    - name: Désactivation des ports USB - modprobe.
+      lineinfile:
+        dest: /etc/modprobe.d/no-usb.conf
+        line: 'install usb-storage /bin/true'
+        mode: '0644'
+        create: yes
+
+    - name: Désactivation du firewire - blacklist.
+      kernel_blacklist:
+        name: firewire-core
+        state: present
+
+    - name: Désactivation du firewire - modprobe.
+      lineinfile:
+        dest: /etc/modprobe.d/no-firewire.conf
+        line: "{{ item }}"
+        mode: '0644'
+        create: yes
+      with_items:
+        - 'blacklist ohci1394'
+        - 'blacklist sbp2'
+        - 'blacklist dv1394'
+        - 'blacklist raw1394'
+        - 'blacklist video1394'
+        - 'blacklist firewire-ohci'
+        - 'blacklist firewire-sbp2'
+
+    - name: Modification de certaines limites du système.
+      template:
+        src: templates/conf_limit.j2
+        dest: /etc/security/limits.d/conf_limit.conf
+        backup: no
+        owner: root
+        group: root
+        mode: 0644
+
+- name: Message Discord de début de playbook.
+  community.general.discord:
+    webhook_id: "{{ id_webhook }}"
+    webhook_token: "{{ token_webhook }}"
+    content: "ATTENTION !! Le serveur de jeux est en cours de redémarrage."
+    username: Ansible
+    avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
 - name: Redémarrage du serveur.
   reboot:
