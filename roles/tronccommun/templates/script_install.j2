@@ -1,0 +1,21 @@
+{{ ansible_managed | comment }}
+
+#!/bin/bash
+# -*- coding: utf-8 -*-
+
+#==============================================================================
+# Titre            : script_install
+# Description      : Script d'installation de packages'
+# Auteur           : Sébastux
+# Date             : 09/10/2022
+# Modification     : 09/10/2022
+# Version          : 1.0.0
+# Utilisation      : ./script_install.sh
+# Notes            : Ce script est destiné à être lancé par ansible pour
+#                    installer les packages en cas d'échec du module apt.
+# Version de bash  : 5.1.4
+#==============================================================================
+
+dpkg --configure -a
+
+aptitude install -y {{ liste_install_script }}

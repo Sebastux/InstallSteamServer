@@ -1,0 +1,14 @@
+{{ ansible_managed | comment }}
+
+[DEFAULT]
+bantime = 3h
+
+bantime.increment = true
+
+bantime.factor = 4
+
+ignoreself = true
+
+ignoreip = 127.0.0.1 {{ ip_whitelist }}
+
+logencoding = utf-8

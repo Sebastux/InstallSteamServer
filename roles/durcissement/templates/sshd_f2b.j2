@@ -7,5 +7,5 @@ port = {{ new_ssh_port | default('22') }}
 logpath = %(sshd_log)s
 maxretry = 3
 bantime = 86400
-ignoreip = 127.0.0.1
+ignoreip = 127.0.0.1 {{ ip_whitelist }}
 logencoding = utf-8

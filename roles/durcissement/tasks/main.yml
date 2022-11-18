@@ -95,26 +95,36 @@
     username: Ansible
     avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
-- name: Gestion du pare feu.
-  block:
-    - name: Démarrage du pare-feu.
-      systemd:
-        name: firewalld
-        state: started
-        enabled: yes
 
+- name: Gestion de services.
+  block:
     - name: Démarrage de fail2ban.
       systemd:
         name: fail2ban
-        state: started
-        enabled: yes
+        state: stopped
+        enabled: no
 
     - name: Arret du service apache.
       systemd:
         name: apache2
         state: stopped
         enabled: no
+      ignore_errors: true
 
+    - name: Démarrage du pare-feu.
+      systemd:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Arret d'apparmor.
+      systemd:
+        name: apparmor
+        state: stopped
+        enabled: no
+
+- name: Gestion du pare feu.
+  block:
     - name: Ouverture du port cockpit.
       firewalld:
         service: cockpit
@@ -199,8 +209,8 @@
 
     - name: Désactivation du protocole dccp - modprobe.
       lineinfile:
-        dest: /etc/modprobe.d/no-firewire.conf
-        line: "{{ item }}"
+        dest: /etc/modprobe.d/no-dccp.conf
+        line: 'blacklist dccp'
         mode: '0644'
         create: yes
 
@@ -209,10 +219,10 @@
         name: sctp
         state: present
 
-    - name: Désactivation du firewire - modprobe.
+    - name: Désactivation du sctp - modprobe.
       lineinfile:
-        dest: /etc/modprobe.d/no-firewire.conf
-        line: "{{ item }}"
+        dest: /etc/modprobe.d/no-sctp.conf
+        line: 'blacklist sctp'
         mode: '0644'
         create: yes
 
@@ -221,10 +231,10 @@
         name: rds
         state: present
 
-    - name: Désactivation du firewire - modprobe.
+    - name: Désactivation du rds - modprobe.
       lineinfile:
-        dest: /etc/modprobe.d/no-firewire.conf
-        line: "{{ item }}"
+        dest: /etc/modprobe.d/no-rds.conf
+        line: 'blacklist rds'
         mode: '0644'
         create: yes
 
@@ -233,10 +243,10 @@
         name: tipc
         state: present
 
-    - name: Désactivation du firewire - modprobe.
+    - name: Désactivation du tipc - modprobe.
       lineinfile:
-        dest: /etc/modprobe.d/no-firewire.conf
-        line: "{{ item }}"
+        dest: /etc/modprobe.d/no-tipc.conf
+        line: 'blacklist tipc'
         mode: '0644'
         create: yes
 
@@ -281,6 +291,19 @@
         group: root
         mode: 0644
 
+- name: Installation des fichiers de configuration de fail2ban.
+  template:
+    src: "templates/{{ item.source }}"
+    dest: "/etc/fail2ban/{{ item.destination }}"
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { source: 'jail.j2', destination: 'jail.conf' }
+    - { source: 'fail2ban_jail_conf.j2', destination: 'jail.local' }
+    - { source: 'sshd_f2b.j2', destination: 'fail2ban.d/sshd.conf' }
+
 - name: Message Discord de début de playbook.
   community.general.discord:
     webhook_id: "{{ id_webhook }}"
@@ -288,6 +311,15 @@
     content: "ATTENTION !! Le serveur de jeux est en cours de redémarrage."
     username: Ansible
     avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
+
+- name: Suppression de l'ancienne clé SSH sur la machine locale.
+  shell: 'sed -i "/{{ ansible_default_ipv4.address }}/d" $HOME/.ssh/known_hosts'
+  args:
+    executable: /bin/bash
+  delegate_to: localhost
+  register: var_sshkey
+  failed_when: var_sshkey.rc != 0
+  changed_when: var_sshkey.rc == 0
 
 - name: Redémarrage du serveur.
   reboot:

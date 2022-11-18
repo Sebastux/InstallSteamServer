@@ -46,12 +46,23 @@
         update_cache: yes
         dpkg_options: Dpkg::Options::="--force-overwrite" --fix-broken install
   rescue:
-    - name: Installation des packages du rôle.
-      apt:
-        name: "{{ liste_install }}"
-        state: latest
-        update_cache: yes
-        dpkg_options: Dpkg::Options::="--force-overwrite" --fix-broken install
+    - name: Installation du script.
+      template:
+        src: templates/script_install.j2
+        dest: /root/script_install.sh
+        owner: root
+        group: root
+        mode: 0700
+
+    - name: Exécution du script d'installation.
+      shell: /root/script_install.sh
+      args:
+        executable: /bin/bash
+
+    - name: Suppression du script d'installation.
+      file:
+        path: /root/script_install.sh
+        state: absent
 
 - name: Mise à jour des packages de bases python.
   pip:

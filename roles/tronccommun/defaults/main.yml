@@ -3,10 +3,19 @@ liste_install: [ 'aptitude', 'cockpit', 'cockpit-doc', 'cockpit-networkmanager',
                  'cockpit-packagekit', 'cockpit-pcp', 'cockpit-shell',
                  'cockpit-ssh', 'cockpit-storaged', 'cockpit-system',
                  'cockpit-systemd', 'cockpit-users', 'cockpit-ws',
-                 'chrony', 'python3-all', 'p7zip-full', 'sudo',
-                 'mlocate', 'apt-file', 'net-tools', 'tree', 'wget', 'curl',
-                 'vim', 'vim-addon-manager', 'vim-doc', 'vim-pathogen',
-                 'vim-scripts', 'vim-solarized', 'vim-syntastic',  'dirmngr',
-                 'vim-youcompleteme', 'git-all', 'python3-all', 'python3-pip' ]
+                 'chrony', 'p7zip-full', 'sudo', 'mlocate',
+                 'apt-file', 'net-tools', 'tree', 'wget', 'curl',
+                 'vim', 'vim-doc', 'dirmngr', 'git-all',
+                 'python3-all', 'python3-pip', 'firewalld' ]
+
+install_python: [ 'python3-pip', 'python3-all' ]
 
 liste_pip: [ 'pip', 'setuptools', 'wheel' ]
+
+
+liste_install_script: "aptitude cockpit cockpit-doc cockpit-networkmanager
+                       cockpit-packagekit cockpit-pcp cockpit-shell cockpit-ssh
+                       cockpit-storaged cockpit-system cockpit-systemd
+                       cockpit-users cockpit-ws chrony p7zip-full sudo mlocate
+                       apt-file net-tools tree wget curl vim vim-doc dirmngr
+                       git-all python3-all python3-pip firewalld"

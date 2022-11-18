@@ -27,7 +27,6 @@
     - { source: 'backports.j2', destination: 'backports.list' }
     - { source: 'proposedupdate.j2', destination: 'proposedupdate.list' }
     - { source: 'backports.j2', destination: 'backports.list' }
-    - { source: 'nala.j2', destination: 'nala.list' }
 
 - name: Message Discord intermédiaire.
   community.general.discord:
@@ -37,8 +36,22 @@
     username: Ansible
     avatar_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXv5yLb0EOmi0D9Ca3moLnlNfIqYD2ZYy6-Q&usqp=CAU"
 
+- name: Installation des packages gpg.
+  apt:
+    name: "{{ gpg_install }}"
+    state: latest
+    update_cache: yes
 
-- name: Installation de la clé nala.
+- name: Ajout du dépôt nala.
+  template:
+    src: templates/nala.j2
+    dest: /etc/apt/sources.list.d/nala.list
+    owner: root
+    group: root
+    mode: 0644
+    backup: no
+
+- name: Installation de la clé du dépôt nala.
   apt_key:
     url: https://deb.volian.org/volian/scar.key
     state: present
