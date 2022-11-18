@@ -1,4 +1,4 @@
-# {{ ansible_managed | comment }}
+{{ ansible_managed | comment }}
 
 # Alias perso
 unalias ll 2>/dev/null
@@ -12,3 +12,6 @@ clear
 cat /root/.alias/banniere.txt
 echo ""
 neofetch
+
+# Modification de la variable PS1
+export PS1="[\[$(tput sgr0)\]\[$(tput bold)\]\[\033[38;5;160m\]\u\[$(tput sgr0)\]@\[$(tput sgr0)\]\[\033[38;5;14m\]\h\[$(tput sgr0)\]](\W) : \[$(tput sgr0)\]"
