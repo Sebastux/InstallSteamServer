@@ -1,7 +1,9 @@
 [submodule "roles/tronccommun"]
 	path = roles/tronccommun
 	url = https://github.com/Sebastux/tronccommun.git
+	branch = develop
 
 [submodule "roles/durcissement"]
 	path = roles/durcissement
 	url = https://github.com/Sebastux/durcissement.git
+	branch = develop
