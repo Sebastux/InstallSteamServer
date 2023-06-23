@@ -1,0 +1,3 @@
+[submodule "roles/tronccommun"]
+	path = roles/tronccommun
+	url = https://github.com/Sebastux/tronccommun.git
